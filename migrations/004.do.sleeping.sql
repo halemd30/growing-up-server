@@ -13,7 +13,7 @@ CREATE TYPE sleep_opts AS ENUM (
 
 CREATE TABLE sleeping (
     id SERIAL PRIMARY KEY,
-    date TIMESTAMP NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT now(),
     notes TEXT,
     duration time NOT NULL,
     sleep_type sleeping_types,

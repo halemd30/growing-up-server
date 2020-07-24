@@ -6,18 +6,13 @@ CREATE TYPE food_category AS ENUM (
     'formula'
 );
 
-CREATE TYPE feeding_sides AS ENUM (
-    'left',
-    'right'
-);
-
 CREATE TABLE eating (
     id SERIAL PRIMARY KEY,
-    date TIMESTAMP NOT NULL,
+    date TIMESTAMP NOT NULL DEFAULT now(),
     notes TEXT,
     duration time NOT NULL,
     food_type food_category,
-    side_fed feeding_sides,
+    side_fed TEXT,
     child_id INTEGER REFERENCES children(id)
 );
 
