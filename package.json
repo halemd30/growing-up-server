@@ -1,11 +1,11 @@
 {
   "name": "growing-up-server",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/server.js",
+    "migrate": "postgrator --config postgrator-config.js",
     "start": "node src/server.js"
   },
   "keywords": [],
@@ -24,5 +24,14 @@
   },
   "devDependencies": {
     "postgrator-cli": "^3.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halemd30/growing-up-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/halemd30/growing-up-server/issues"
+  },
+  "homepage": "https://github.com/halemd30/growing-up-server#readme",
+  "description": ""
 }
