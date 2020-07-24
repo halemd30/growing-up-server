@@ -12,11 +12,11 @@ app.use(morgan(morganOptions));
 app.use(cors());
 app.use(helmet());
 
-app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/child", childRouter);
-app.use("/api/eating", eatingRouter);
-app.use("/api/sleeping", sleepingRouter);
+// app.use("/api/auth", authRouter);
+// app.use("/api/users", usersRouter);
+// app.use("/api/child", childRouter);
+// app.use("/api/eating", eatingRouter);
+// app.use("/api/sleeping", sleepingRouter);
 
 app.get("/", (req, res) => {
   res.send("The good stuff");
