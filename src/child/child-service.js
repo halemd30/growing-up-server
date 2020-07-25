@@ -4,21 +4,21 @@ const ChildService = {
   insertChild(db, newChild) {
     return db
       .insert(newChild)
-      .into("child")
+      .into("children")
       .returning("*")
       .then(([child]) => child);
   },
   getById(db, id) {
-    return db.select("*").from("child").where({ id }).first();
+    return db.select("*").from("children").where({ id }).first();
   },
   getByUserId(db, user_id) {
-    return db.select("*").from("child").where({ user_id });
+    return db.select("*").from("children").where({ user_id });
   },
   deleteChild(db, id) {
-    return db.from("child").where({ id }).delete();
+    return db.from("children").where({ id }).delete();
   },
   updateChild(db, id, child) {
-    return db.from("child").where({ id }).update(child);
+    return db.from("children").where({ id }).update(child);
   },
   serializeChild(child) {
     return {
