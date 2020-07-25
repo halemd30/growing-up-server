@@ -77,35 +77,34 @@ function seedUsers(db, users) {
     return db
         .into('users')
         .insert(preppedUsers)
-        .then(() =>
-            db.raw(`SELECT setval('users_id_seq', ?)`, [
-                users[users.length - 1].id,
-            ])
-        );
+        .then(() => db.raw(`SELECT setval('users_id_seq', ?)`, [users[users.length - 1].id]));
 }
 
 function makeMaliciousUser() {
     const maliciousUser = {
         first_name: `image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         last_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
-        username:
-            'Naughty naughty very naughty <script>alert("xss");</script>',
-        password:
-            '11Naughty naughty very naughty <script>alert("xss");</script>',
+        username: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        password: '11Naughty naughty very naughty <script>alert("xss");</script>',
     };
     const expectedUser = {
         first_name: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
-        last_name:
-            'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
-        username:
-            'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
-        password:
-            '11Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
+        last_name: 'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
+        username: 'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
+        password: '11Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
     };
     return {
         maliciousUser,
         expectedUser,
     };
+}
+
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+    const token = jwt.sign({ user_id: user.id }, secret, {
+        subject: user.username,
+        algorithm: 'HS256',
+    });
+    return `Bearer ${token}`;
 }
 
 module.exports = {
@@ -116,4 +115,5 @@ module.exports = {
     cleanAllTables,
     cleanTables_NotUsers,
     seedUsers,
-}
+    makeAuthHeader,
+};

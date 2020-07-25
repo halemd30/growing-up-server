@@ -40,23 +40,22 @@ describe('users-router endpoints', () => {
                 expect(res.body).to.not.have.property('password');
                 expect(res.headers.location).to.eql(`/api/users/${res.body.id}`);
             })
-            .expect(
-                res =>
-                    db
-                        .from('users')
-                        .select('*')
-                        .where({ id: res.body.id })
-                        .first()
-                        .then(row => {
-                            expect(row.first_name).to.eql(newUser.first_name);
-                            expect(row.last_name).to.eql(newUser.last_name);
-                            expect(row.username).to.eql(newUser.username);
+            .expect(res =>
+                db
+                    .from('users')
+                    .select('*')
+                    .where({ id: res.body.id })
+                    .first()
+                    .then(row => {
+                        expect(row.first_name).to.eql(newUser.first_name);
+                        expect(row.last_name).to.eql(newUser.last_name);
+                        expect(row.username).to.eql(newUser.username);
 
-                            return bcrypt.compare(newUser.password, row.password);
-                        })
-                .then(compareResult => {
-                    expect(compareResult).to.be.true;
-                })
+                        return bcrypt.compare(newUser.password, row.password);
+                    })
+                    .then(compareResult => {
+                        expect(compareResult).to.be.true;
+                    })
             );
     });
 
@@ -86,12 +85,9 @@ describe('users-router endpoints', () => {
             username: 'new_user',
             password: 't4$s',
         };
-        return supertest(app)
-            .post('/api/users')
-            .send(userShortPass)
-            .expect(400, {
-                error: `Password must be at least 8 characters`,
-            });
+        return supertest(app).post('/api/users').send(userShortPass).expect(400, {
+            error: `Password must be at least 8 characters`,
+        });
     });
     it(`responds 400 'Password must be shorter than 72 characters' when empty password`, () => {
         const userLongPass = {
@@ -100,12 +96,9 @@ describe('users-router endpoints', () => {
             username: 'new_user',
             password: '*'.repeat(73),
         };
-        return supertest(app)
-            .post('/api/users')
-            .send(userLongPass)
-            .expect(400, {
-                error: `Password must be less than 72 characters`,
-            });
+        return supertest(app).post('/api/users').send(userLongPass).expect(400, {
+            error: `Password must be less than 72 characters`,
+        });
     });
     it(`responds 400 when password starts with a space`, () => {
         const userPassSpace = {
@@ -114,12 +107,9 @@ describe('users-router endpoints', () => {
             username: 'new_user',
             password: ' ttTT5555555',
         };
-        return supertest(app)
-            .post('/api/users')
-            .send(userPassSpace)
-            .expect(400, {
-                error: `Password must not start with or end with spaces`,
-            });
+        return supertest(app).post('/api/users').send(userPassSpace).expect(400, {
+            error: `Password must not start with or end with spaces`,
+        });
     });
     it(`responds 400 when password ends with a space`, () => {
         const userPassSpace = {
@@ -128,12 +118,9 @@ describe('users-router endpoints', () => {
             username: 'new_user',
             password: 'ttTT5555555 ',
         };
-        return supertest(app)
-            .post('/api/users')
-            .send(userPassSpace)
-            .expect(400, {
-                error: `Password must not start with or end with spaces`,
-            });
+        return supertest(app).post('/api/users').send(userPassSpace).expect(400, {
+            error: `Password must not start with or end with spaces`,
+        });
     });
     it(`responds 400 when password isn't complex`, () => {
         const userPassNotComplex = {
@@ -142,12 +129,9 @@ describe('users-router endpoints', () => {
             username: 'new_user',
             password: 'tt5555555',
         };
-        return supertest(app)
-            .post('/api/users')
-            .send(userPassNotComplex)
-            .expect(400, {
-                error: `Password must include at least 1 uppercase, 1 lowercase, and 1 number`,
-            });
+        return supertest(app).post('/api/users').send(userPassNotComplex).expect(400, {
+            error: `Password must include at least 1 uppercase, 1 lowercase, and 1 number`,
+        });
     });
 
     context('Given users in the database', () => {
@@ -162,12 +146,9 @@ describe('users-router endpoints', () => {
                 username: testUsers[0].username,
                 password: 'ttTT55555',
             };
-            return supertest(app)
-                .post('/api/users')
-                .send(duplicateUser)
-                .expect(400, {
-                    error: `Username already taken`,
-                });
+            return supertest(app).post('/api/users').send(duplicateUser).expect(400, {
+                error: `Username already taken`,
+            });
         });
 
         context('Given an xss attack', () => {
@@ -187,6 +168,5 @@ describe('users-router endpoints', () => {
         });
     });
 });
-
 
 //write tests for .get req
