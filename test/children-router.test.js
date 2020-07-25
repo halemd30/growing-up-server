@@ -35,17 +35,15 @@ describe('children-router endpoints', () => {
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .expect(200)
                 .expect(res => {
-                    expect(res.body[0]).to.have.property('id')
-                    expect(res.body[0].first_name).to.eql(expectedChildren[0].first_name)
-                    expect(res.body[0].last_name).to.eql(expectedChildren[0].last_name)
-                    expect(res.body[0].age).to.eql(expectedChildren[0].age)
-                    expect(res.body[0].user_id).to.eql(expectedChildren[0].user_id)
-                    expect(res.body[1]).to.have.property('id')
-                    expect(res.body[1].first_name).to.eql(expectedChildren[1].first_name)
-                    expect(res.body[1].last_name).to.eql(expectedChildren[1].last_name)
-                    expect(res.body[1].age).to.eql(expectedChildren[1].age)
-                    expect(res.body[1].user_id).to.eql(expectedChildren[1].user_id)
-                })
+                    expect(res.body[0]).to.have.property('id');
+                    expect(res.body[0].first_name).to.eql(expectedChildren[0].first_name);
+                    expect(res.body[0].age).to.eql(expectedChildren[0].age);
+                    expect(res.body[0].user_id).to.eql(expectedChildren[0].user_id);
+                    expect(res.body[1]).to.have.property('id');
+                    expect(res.body[1].first_name).to.eql(expectedChildren[1].first_name);
+                    expect(res.body[1].age).to.eql(expectedChildren[1].age);
+                    expect(res.body[1].user_id).to.eql(expectedChildren[1].user_id);
+                });
         });
         it('GET /api/children/:childrenId responds with 200 and requested child', () => {
             const child_id = 1;
@@ -55,18 +53,16 @@ describe('children-router endpoints', () => {
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .expect(200)
                 .expect(res => {
-                    expect(res.body).to.have.property('id')
-                    expect(res.body.first_name).to.eql(expectedChild.first_name)
-                    expect(res.body.last_name).to.eql(expectedChild.last_name)
-                    expect(res.body.age).to.eql(expectedChild.age)
-                    expect(res.body.user_id).to.eql(expectedChild.user_id)
-                })
+                    expect(res.body).to.have.property('id');
+                    expect(res.body.first_name).to.eql(expectedChild.first_name);
+                    expect(res.body.age).to.eql(expectedChild.age);
+                    expect(res.body.user_id).to.eql(expectedChild.user_id);
+                });
         });
         it('PATCH /api/children/:childrenId responds with 204, updates child', () => {
             const child_id = 1;
             const editedChild = {
                 first_name: 'newchild',
-                last_name: 'other',
                 age: 5,
                 user_id: testUsers[0].id,
                 id: child_id,
@@ -75,7 +71,6 @@ describe('children-router endpoints', () => {
                 ...testChildren[child_id - 1],
                 id: child_id,
                 first_name: 'newchild',
-                last_name: 'other',
                 age: 5,
                 user_id: testUsers[0].id,
             };
@@ -169,12 +164,11 @@ describe('children-router endpoints', () => {
                         error: { message: 'Child does not exist' },
                     });
             });
-    });
+        });
 
         it('POST /api/children responds with 201 and the new child', () => {
             const newChild = {
                 first_name: 'newchild',
-                last_name: 'other',
                 age: 5,
                 user_id: testUsers[0].id,
             };
@@ -186,7 +180,6 @@ describe('children-router endpoints', () => {
                 .expect(res => {
                     expect(res.body).to.have.property('id');
                     expect(res.body.first_name).to.eql(newChild.first_name);
-                    expect(res.body.last_name).to.eql(newChild.last_name);
                     expect(res.body.age).to.eql(newChild.age);
                     expect(res.body.user_id).to.eql(newChild.user_id);
                     expect(res.headers.location).to.eql(`/api/children/${res.body.id}`);
@@ -199,15 +192,10 @@ describe('children-router endpoints', () => {
                 );
         });
 
-        const requiredFields = [
-            'first_name',
-            'last_name',
-            'age',
-        ];
+        const requiredFields = ['first_name', 'age'];
         requiredFields.forEach(field => {
             const reqNewChild = {
                 first_name: 'newchild',
-                last_name: 'other',
                 age: 5,
                 user_id: testUsers[0].id,
             };
@@ -225,7 +213,6 @@ describe('children-router endpoints', () => {
     });
 
     context('Given an xss attack', () => {
-        //const testUser = helpers.makeTestUsers()[1];
         const { maliciousChild, expectedChild } = helpers.makeMaliciousChild();
 
         beforeEach('insert malicious child', () => {
@@ -239,7 +226,6 @@ describe('children-router endpoints', () => {
                 .expect(200)
                 .expect(res => {
                     expect(res.body[0].first_name).to.eql(expectedChild.first_name);
-                    expect(res.body[0].last_name).to.eql(expectedChild.last_name);
                     expect(res.body[0].age).to.eql(expectedChild.age);
                 });
         });
@@ -251,7 +237,6 @@ describe('children-router endpoints', () => {
                 .expect(200)
                 .expect(res => {
                     expect(res.body.first_name).to.eql(expectedChild.first_name);
-                    expect(res.body.last_name).to.eql(expectedChild.last_name);
                     expect(res.body.age).to.eql(expectedChild.age);
                 });
         });
@@ -263,8 +248,7 @@ describe('children-router endpoints', () => {
                 .expect(201)
                 .expect(res => {
                     expect(res.body.first_name).to.eql(expectedChild.first_name);
-                    expect(res.body.last_name).to.eql(expectedChild.last_name);
-                    expect(res.body.age).to.eql(expectedChild.age);;
+                    expect(res.body.age).to.eql(expectedChild.age);
                 });
         });
     });
