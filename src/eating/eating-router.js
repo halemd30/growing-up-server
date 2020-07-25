@@ -6,16 +6,25 @@ const moment = require("moment");
 const eatingRouter = express.Router();
 const db = req.app.get("db");
 
+eatingRouter.route("/").get((req, res, next) => {
+  EatingService.getAllMeals(db)
+    .then((meals) => {
+      res.json(meals.map(EatingService.serializeMeal));
+    })
+    .catch(next);
+});
+
 eatingRouter
-  .route("/")
+  .route("/:childId")
   .get((req, res, next) => {
-    EatingService.getAllMeals(db)
-      .then((meals) => {
-        res.json(meals.map(EatingService.serializeMeal));
+    const id = parseInt(req.params.childId);
+    EatingService.getByChildId(db, id)
+      .then((childMeals) => {
+        res.json(childMeals.map(EatingService.serializeMeal));
       })
       .catch(next);
   })
-  .post((req, res, next) => {
+  .post((req, res) => {
     const { notes, duration, food_type, side_fed } = req.body;
     const newMeal = {
       child_id: req.child_id,
@@ -31,22 +40,13 @@ eatingRouter
           error: { message: `Missing '${key}' in request body` },
         });
 
-    EatingService.insertMeal(db, newMeal)
-      .then((meal) => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${meal.id}`))
-          .json(EatingService.serializeMeal(meal));
-      })
-      .catch(next);
+    EatingService.insertMeal(db, newMeal).then((meal) => {
+      res
+        .status(201)
+        .location(path.posix.join(req.originalUrl, `/${meal.id}`))
+        .json(EatingService.serializeMeal(meal));
+    });
   });
-
-eatingRouter.route("/:childId").get((req, res) => {
-  const id = parseInt(req.params.childId);
-  EatingService.getByChildId(db, id).then((childMeals) => {
-    res.json(childMeals.map(EatingService.serializeMeal));
-  });
-});
 
 eatingRouter
   .route("/:mealId")
