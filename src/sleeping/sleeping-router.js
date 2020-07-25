@@ -5,16 +5,23 @@ const SleepingService = require("./sleeping-service");
 const sleepingRouter = express.Router();
 const db = req.app.get("db");
 
+sleepingRouter.route("/").get((req, res) => {
+  SleepingService.getAllSleep(db).then((sleep) => {
+    res.json(sleep.map(SleepingService.serializeSleep));
+  });
+});
+
 sleepingRouter
-  .route("/")
+  .route("/:childId")
   .get((req, res, next) => {
-    SleepingService.getAllSleep(db)
-      .then((sleep) => {
-        res.json(sleep.map(SleepingService.serializeSleep));
+    const id = parseInt(req.params.childId);
+    SleepingService.getByChildId(db, id)
+      .then((childSleep) => {
+        res.json(childSleep.map(SleepingService.serializeSleep));
       })
       .catch(next);
   })
-  .post((req, res, next) => {
+  .post((req, res) => {
     const { notes, duration, sleep_type, sleep_category } = req.body;
     const newSleep = {
       child_id: req.child_id,
@@ -30,22 +37,13 @@ sleepingRouter
           error: { message: `Missing '${key}' in request body` },
         });
 
-    SleepingService.insertSleep(db, newSleep)
-      .then((sleep) => {
-        res
-          .status(201)
-          .location(path.posix.join(req.originalUrl, `/${sleep.id}`))
-          .json(SleepingService.serializeSleep(sleep));
-      })
-      .catch(next);
+    SleepingService.insertSleep(db, newSleep).then((sleep) => {
+      res
+        .status(201)
+        .location(path.posix.join(req.originalUrl, `/${sleep.id}`))
+        .json(SleepingService.serializeSleep(sleep));
+    });
   });
-
-sleepingRouter.route("/:childId").get((req, res) => {
-  const id = parseInt(req.params.childId);
-  SleepingService.getByChildId(db, id).then((childSleep) => {
-    res.json(childSleep.map(SleepingService.serializeSleep));
-  });
-});
 
 sleepingRouter
   .route("/:sleepId")
