@@ -23,10 +23,9 @@ childrenRouter
     .post(jsonParser, (req, res, next) => {
         const db = req.app.get('db');
 
-        const { first_name, last_name, age } = req.body;
+        const { first_name, age } = req.body;
         const newChildren = {
             first_name,
-            last_name,
             age,
             user_id: req.user.id,
         };
@@ -64,7 +63,7 @@ childrenRouter
             .catch(next);
     })
     .get((req, res, next) => {
-        res.json(ChildrenService.serializeChildren(res.child))
+        res.json(ChildrenService.serializeChildren(res.child));
     })
     .delete((req, res, next) => {
         const db = req.app.get('db');
@@ -74,16 +73,15 @@ childrenRouter
     })
     .patch((req, res, next) => {
         const db = req.app.get('db');
-        const { first_name, last_name, age } = req.body;
-        const child_id = req.params.childrenId
+        const { first_name, age } = req.body;
+        const child_id = req.params.childrenId;
 
         const updatedChildren = {
             first_name,
-            last_name,
             age,
         };
 
-        const values = Object.values(updatedChildren).filter(Boolean).length
+        const values = Object.values(updatedChildren).filter(Boolean).length;
         if (values === 0) {
             return res.status(400).json({
                 error: { message: `Request body must contain value to update` },
@@ -94,7 +92,7 @@ childrenRouter
             .then(child => {
                 res.status(201).json(ChildrenService.serializeChildren(child));
             })
-            .catch(next)
+            .catch(next);
     });
 
 module.exports = childrenRouter;
