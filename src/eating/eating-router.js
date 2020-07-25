@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const EatingService = require("./eating-service");
+const moment = require("moment");
 
 const eatingRouter = express.Router();
 const db = req.app.get("db");
@@ -55,11 +56,12 @@ eatingRouter
   })
   .patch((req, res, next) => {
     const id = parseInt(req.params.mealId);
+    const currentDate = new Date();
+    const duration = currentDate - req.params.date;
     EatingService.updateEndMeal(db, id, {
-      date: new Date(),
-      duration: duration.value,
-      food_type: food_type.value,
-      side_fed: side_fed.value,
+      duration: duration,
+      food_type: req.params.food_type,
+      side_fed: req.params.side_fed,
     })
       .then(res.status(204).end())
       .catch(next);

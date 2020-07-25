@@ -55,11 +55,12 @@ sleepingRouter
   })
   .patch((req, res) => {
     const id = req.params.sleepId;
+    const currentDate = new Date();
+    const duration = currentDate - req.params.Date;
     SleepingService.updateSleep(db, id, {
-      date: new Date(),
-      duration: duration.value,
-      food_type: food_type.value,
-      side_fed: side_fed.value,
+      duration: duration,
+      food_type: req.params.food_type,
+      side_fed: req.params.side_fed,
     }).then(res.status(204).end());
   });
 
