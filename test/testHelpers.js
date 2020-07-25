@@ -20,6 +20,29 @@ function makeTestUsers() {
     ];
 }
 
+function makeTestChildren() {
+    return [
+        {
+            first_name: 'ryan',
+            last_name: 'name',
+            age: 5,
+            user_id: 1,
+        },
+        {
+            first_name: 'cece',
+            last_name: 'halpert',
+            age: 12,
+            user_id: 2,
+        },
+        {
+            first_name: 'philip',
+            last_name: 'halpert',
+            age: 3,
+            user_id: 1,
+        },
+    ];
+}
+
 function cleanAllTables(db) {
     return db.transaction(trx =>
         trx
@@ -53,7 +76,7 @@ function cleanTables_NotUsers(db) {
                 `TRUNCATE
                 sleeping,
                 eating,
-                children,
+                children
               RESTART IDENTITY CASCADE`
             )
             .then(() =>
@@ -99,6 +122,25 @@ function makeMaliciousUser() {
     };
 }
 
+function makeMaliciousChild() {
+    const maliciousChild = {
+        first_name: `image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
+        last_name: 'Naughty naughty very naughty <script>alert("xss");</script>',
+        age: 3,
+        user_id: 1,
+    };
+    const expectedChild = {
+        first_name: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        last_name: 'Naughty naughty very naughty &lt;script&gt;alert("xss");&lt;/script&gt;',
+        age: 3,
+        user_id: 1,
+    };
+    return {
+        maliciousChild,
+        expectedChild,
+    };
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
         subject: user.username,
@@ -109,8 +151,10 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 
 module.exports = {
     makeTestUsers,
+    makeTestChildren,
 
     makeMaliciousUser,
+    makeMaliciousChild,
 
     cleanAllTables,
     cleanTables_NotUsers,
