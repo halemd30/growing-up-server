@@ -136,26 +136,26 @@ describe.only('eating-router endpoints', () => {
     //                 },
     //             });
     //     });
-    //     it('DELETE /api/children/:childrenId responds with 204 and removes the child', () => {
-    //         const child_id = 2;
-    //         return supertest(app)
-    //             .delete(`/api/children/${child_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .expect(204);
-    //     });
+        it('DELETE /api/eating/:mealId responds with 204 and removes the meal', () => {
+            const meal_id = 2;
+            return supertest(app)
+                .delete(`/api/eating/${meal_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(204);
+        });
     });
 
     context('Given no meals in the database', () => {
         describe('/api/eating', () => {
-    //         it('DELETE /api/children/:childrenId responds with 404', () => {
-    //             const child_id = 123;
-    //             return supertest(app)
-    //                 .delete(`/api/children/${child_id}`)
-    //                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                 .expect(404, {
-    //                     error: { message: 'Child does not exist' },
-    //                 });
-    //         });
+            it('DELETE /api/eating/:mealId responds with 404', () => {
+                const meal_id = 1;
+                return supertest(app)
+                    .delete(`/api/eating/${meal_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(404, {
+                        error: { message: 'Meal does not exist' },
+                    });
+            });
             it(`GET /api/eating/all responds with 200 and an empty list`, () => {
                 const child_id = 1
                 return supertest(app)

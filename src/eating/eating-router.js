@@ -79,10 +79,12 @@ eatingRouter
   .get((req, res, next) => {
     res.json(EatingService.serializeMeal(res.meal));
   })
-//   .delete((req, res, next) => {
-//     const id = parseInt(req.params.mealId);
-//     EatingService.deleteMeal(db, id).then(res.status(204).end()).catch(next);
-//   })
+  .delete((req, res, next) => {
+    const db = req.app.get("db");
+
+    const id = parseInt(req.params.mealId);
+    EatingService.deleteMeal(db, id).then(res.status(204).end()).catch(next);
+  })
 //   .patch((req, res, next) => {
 //     const id = parseInt(req.params.mealId);
 //     const currentDate = new Date();
