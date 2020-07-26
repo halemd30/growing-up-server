@@ -57,8 +57,8 @@ sleepingRouter
     const duration = currentDate - req.params.Date;
     SleepingService.updateSleep(db, id, {
       duration: duration,
-      food_type: req.params.food_type,
-      side_fed: req.params.side_fed,
+      sleep_type: req.params.sleep_type,
+      sleep_category: req.params.sleep_category,
     }).then(res.status(204).end());
   });
 
