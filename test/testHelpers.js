@@ -40,6 +40,39 @@ function makeTestChildren() {
     ];
 }
 
+function makeTestMeals() {
+    return [
+        {
+            notes: 'fussy - fight to eat',
+            duration: '00:25:22',
+            food_type: 'bottle',
+            side_fed: '',
+            child_id: 1
+        },
+        {
+            notes: 'good job',
+            duration: '01:25:22',
+            food_type: 'breast_fed',
+            side_fed: 'right',
+            child_id: 1
+        },
+        {
+            notes: '',
+            duration: '00:05:22',
+            food_type: 'formula',
+            side_fed: '',
+            child_id: 2
+        },
+        {
+            notes: 'fussy',
+            duration: '00:15:22',
+            food_type: 'breast_fed',
+            side_fed: 'left',
+            child_id: 2
+        },
+    ]
+}
+
 function cleanAllTables(db) {
     return db.transaction(trx =>
         trx
@@ -136,6 +169,27 @@ function makeMaliciousChild() {
     };
 }
 
+function makeMaliciousMeals() {
+    const maliciousMeal = {
+        notes: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        duration: '00:25:22',
+        food_type: 'bottle',
+        side_fed: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        child_id: 1,
+    };
+    const expectedMeal = {
+        notes: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        duration: '00:25:22',
+        food_type: 'bottle',
+        side_fed: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        child_id: 1,
+    }; 
+    return {
+        maliciousMeal,
+        expectedMeal,
+    };
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
         subject: user.username,
@@ -147,9 +201,11 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 module.exports = {
     makeTestUsers,
     makeTestChildren,
+    makeTestMeals,
 
     makeMaliciousUser,
     makeMaliciousChild,
+    makeMaliciousMeals,
 
     cleanAllTables,
     cleanTables_NotUsers,

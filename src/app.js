@@ -5,9 +5,9 @@ const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 const usersRouter = require("./users/users-router");
 const authRouter = require("./auth/auth-router");
-const childrenRouter = require("./child/children-router");
+const childrenRouter = require("./children/children-router");
 const eatingRouter = require("./eating/eating-router");
-const sleepingRouter = require("./sleeping/sleeping-router");
+//const sleepingRouter = require("./sleeping/sleeping-router");
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/children", childrenRouter);
 app.use("/api/eating", eatingRouter);
-app.use("/api/sleeping", sleepingRouter);
+//app.use("/api/sleeping", sleepingRouter);
 
 app.get("/", (req, res) => {
   res.send("The good stuff");
