@@ -24,7 +24,6 @@ const ChildrenService = {
         return {
             id: children.id,
             first_name: xss(children.first_name),
-            last_name: xss(children.last_name),
             age: children.age,
             user_id: children.user_id,
         };

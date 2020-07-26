@@ -65,6 +65,8 @@ describe('auth endpoints', () => {
         });
 
         it('responds 200 and JWT auth token using secret when valid credentials', function () {
+            this.retries(3)
+
             const userValidCreds = {
                 username: testUsers[0].username,
                 password: testUsers[0].password,

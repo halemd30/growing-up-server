@@ -12,11 +12,11 @@ INSERT INTO users (first_name, last_name, username, password)
         ('test', 'user', 'test_w', 'cool_password'),
         ('other', 'person', 'other_test', 'other_password');
 
-INSERT INTO children (first_name, last_name, age, user_id)
+INSERT INTO children (first_name, age, user_id)
     VALUES
-        ('liam', 'smith', '2', 1),
-        ('emma', 'jones', '5', 1),
-        ('olivia', 'kidd', '8', 2);
+        ('liam', '2', 1),
+        ('emma', '5', 1),
+        ('olivia', '8', 2);
 
 INSERT INTO eating (notes, duration, food_type, side_fed, child_id)
     VALUES
