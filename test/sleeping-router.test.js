@@ -4,7 +4,7 @@ const app = require('../src/app');
 const helpers = require('./testHelpers');
 const assert = require('assert');
 
-describe.only('sleeping-router endpoints', () => {
+describe('sleeping-router endpoints', () => {
     let db;
     let testUsers = helpers.makeTestUsers();
     let testChildren = helpers.makeTestChildren();
