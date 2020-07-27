@@ -183,50 +183,55 @@ describe.only('eating-router endpoints', () => {
     //         });
         });
 
-    //     it('POST /api/children responds with 201 and the new child', () => {
-    //         const newChild = {
-    //             first_name: 'newchild',
-    //             age: 5,
-    //             user_id: testUsers[0].id,
-    //         };
-    //         return supertest(app)
-    //             .post('/api/children')
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(newChild)
-    //             .expect(201)
-    //             .expect(res => {
-    //                 expect(res.body).to.have.property('id');
-    //                 expect(res.body.first_name).to.eql(newChild.first_name);
-    //                 expect(res.body.age).to.eql(newChild.age);
-    //                 expect(res.body.user_id).to.eql(newChild.user_id);
-    //                 expect(res.headers.location).to.eql(`/api/children/${res.body.id}`);
-    //             })
-    //             .then(postRes =>
-    //                 supertest(app)
-    //                     .get(`/api/children/${postRes.body.id}`)
-    //                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                     .expect(postRes.body)
-    //             );
-    //     });
+        it('POST /api/eating/all responds with 201 and the new meal', () => {
+            const child_id = 1
+            const newMeal = {
+                notes: 'fussy',
+                duration: '00:15:22',
+                food_type: 'breast_fed',
+                side_fed: 'left',
+            };
+            return supertest(app)
+                .post(`/api/eating/all/${child_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(newMeal)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body).to.have.property('date');
+                    expect(res.body.notes).to.eql(newMeal.notes);
+                    expect(res.body.duration).to.eql(newMeal.duration);
+                    expect(res.body.food_type).to.eql(newMeal.food_type);
+                    expect(res.body.side_fed).to.eql(newMeal.side_fed);
+                    expect(res.body.child_id).to.eql(child_id);
+                    expect(res.headers.location).to.eql(`/api/eating/all/${child_id}/${res.body.id}`);
+                })
+                .then(postRes =>
+                    supertest(app)
+                        .get(`/api/eating/${postRes.body.id}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                        .expect(postRes.body)
+                );
+        });
 
-    //     const requiredFields = ['first_name', 'age'];
-    //     requiredFields.forEach(field => {
-    //         const reqNewChild = {
-    //             first_name: 'newchild',
-    //             age: 5,
-    //             user_id: testUsers[0].id,
-    //         };
-    //         it(`responds with 400 and an error when the '${field}' is missing`, () => {
-    //             delete reqNewChild[field];
-    //             return supertest(app)
-    //                 .post('/api/children')
-    //                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                 .send(reqNewChild)
-    //                 .expect(400, {
-    //                     error: { message: `Missing '${field}' in request body` },
-    //                 });
-    //         });
-    //     });
+        const requiredFields = ['duration', 'food_type'];
+        requiredFields.forEach(field => {
+            const reqNewMeal = {
+                duration: '00:56:33',
+                food_type: 'bottle',
+            };
+            it(`responds with 400 and an error when the '${field}' is missing`, () => {
+                delete reqNewMeal[field];
+                const child_id = 1
+                return supertest(app)
+                    .post(`/api/eating/all/${child_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .send(reqNewMeal)
+                    .expect(400, {
+                        error: { message: `Missing '${field}' in request body` },
+                    });
+            });
+        });
     });
 
     context('Given an xss attack', () => {
@@ -267,16 +272,22 @@ describe.only('eating-router endpoints', () => {
                     expect(res.body.child_id).to.eql(expectedMeal.child_id);
                 });
         });
-    //     it(`POST /api/children removes xss content`, () => {
-    //         return supertest(app)
-    //             .post(`/api/children`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(maliciousChild)
-    //             .expect(201)
-    //             .expect(res => {
-    //                 expect(res.body.first_name).to.eql(expectedChild.first_name);
-    //                 expect(res.body.age).to.eql(expectedChild.age);
-    //             });
-    //     });
+        it(`POST /api/eating/all removes xss content`, () => {
+            const child_id = 1
+            return supertest(app)
+                .post(`/api/eating/all/${child_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(maliciousMeal)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body).to.have.property('date');
+                    expect(res.body.notes).to.eql(expectedMeal.notes);
+                    expect(res.body.duration).to.eql(expectedMeal.duration);
+                    expect(res.body.food_type).to.eql(expectedMeal.food_type);
+                    expect(res.body.side_fed).to.eql(expectedMeal.side_fed);
+                    expect(res.body.child_id).to.eql(expectedMeal.child_id);
+                });
+        });
     });
 });
