@@ -73,6 +73,39 @@ function makeTestMeals() {
     ];
 }
 
+function makeTestSleeps() {
+    return [
+        {
+            notes: 'fussy - fight to sleep',
+            duration: '00:25:22',
+            sleep_type: 'crying',
+            sleep_category: 'bedtime',
+            child_id: 1,
+        },
+        {
+            notes: 'good job',
+            duration: '01:25:22',
+            sleep_type: 'calm',
+            sleep_category: 'nap',
+            child_id: 1,
+        },
+        {
+            notes: '',
+            duration: '00:35:22',
+            sleep_type: 'restless',
+            sleep_category: 'nap',
+            child_id: 2,
+        },
+        {
+            notes: 'fussy',
+            duration: '05:15:22',
+            sleep_type: 'calm',
+            sleep_category: 'bedtime',
+            child_id: 2,
+        },
+    ];
+}
+
 function cleanAllTables(db) {
     return db.transaction(trx =>
         trx
@@ -192,6 +225,27 @@ function makeMaliciousMeals() {
     };
 }
 
+function makeMaliciousSleeps() {
+    const maliciousSleep = {
+        notes: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        duration: '00:25:22',
+        sleep_type: 'crying',
+        sleep_category: 'bedtime',
+        child_id: 1,
+    };
+    const expectedSleep = {
+        notes:`image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        duration: '00:25:22',
+        sleep_type: 'crying',
+        sleep_category: 'bedtime',
+        child_id: 1,
+    };
+    return {
+        maliciousSleep,
+        expectedSleep
+    }
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
     const token = jwt.sign({ user_id: user.id }, secret, {
         subject: user.username,
@@ -204,10 +258,12 @@ module.exports = {
     makeTestUsers,
     makeTestChildren,
     makeTestMeals,
+    makeTestSleeps,
 
     makeMaliciousUser,
     makeMaliciousChild,
     makeMaliciousMeals,
+    makeMaliciousSleeps,
 
     cleanAllTables,
     cleanTables_NotUsers,
