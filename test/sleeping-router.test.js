@@ -78,7 +78,7 @@ describe.only('sleeping-router endpoints', () => {
         it('PATCH /api/sleeping/:sleepId responds with 204, updates sleep instance', () => {
             const sleep_id = 1;
             const editedSleep = {
-                notes:`good sleep`,
+                notes: `good sleep`,
                 duration: '00:25:22',
                 sleep_type: 'calm',
                 sleep_category: 'bedtime',
@@ -152,93 +152,91 @@ describe.only('sleeping-router endpoints', () => {
     });
 
     context('Given no sleeps in the database', () => {
-            it('DELETE /api/sleeping/:sleepId responds with 404', () => {
-                const sleep_id = 1;
-                return supertest(app)
-                    .delete(`/api/sleeping/${sleep_id}`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                    .expect(404, {
-                        error: { message: 'Sleep instance does not exist' },
-                    });
-            });
-            it(`GET /api/sleeping/all responds with 200 and an empty list`, () => {
-                const child_id = 1;
-                return supertest(app)
-                    .get(`/api/sleeping/all/${child_id}`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                    .expect(200, []);
-            });
-            it('GET /api/sleeping/:sleepId responds with 404', () => {
-                const sleep_id = 1;
-                return supertest(app)
-                    .get(`/api/sleeping/${sleep_id}`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                    .expect(404, {
-                        error: { message: 'Sleep instance does not exist' },
-                    });
-            });
-            it('PATCH /api/sleeping/:sleepId responds with 404', () => {
-                const sleep_id = 1;
-                return supertest(app)
-                    .patch(`/api/sleeping/${sleep_id}`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                    .expect(404, {
-                        error: { message: 'Sleep instance does not exist' },
-                    });
-            });
+        it('DELETE /api/sleeping/:sleepId responds with 404', () => {
+            const sleep_id = 1;
+            return supertest(app)
+                .delete(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(404, {
+                    error: { message: 'Sleep instance does not exist' },
+                });
         });
-
-        it('POST /api/sleeping/all responds with 201 and the new sleep instance', () => {
+        it(`GET /api/sleeping/all responds with 200 and an empty list`, () => {
             const child_id = 1;
-            const newSleep = {
-                notes:`good sleep`,
-                duration: '00:25:22',
-                sleep_type: 'calm',
-                sleep_category: 'bedtime',
-            };
+            return supertest(app)
+                .get(`/api/sleeping/all/${child_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(200, []);
+        });
+        it('GET /api/sleeping/:sleepId responds with 404', () => {
+            const sleep_id = 1;
+            return supertest(app)
+                .get(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(404, {
+                    error: { message: 'Sleep instance does not exist' },
+                });
+        });
+        it('PATCH /api/sleeping/:sleepId responds with 404', () => {
+            const sleep_id = 1;
+            return supertest(app)
+                .patch(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(404, {
+                    error: { message: 'Sleep instance does not exist' },
+                });
+        });
+    });
+
+    it('POST /api/sleeping/all responds with 201 and the new sleep instance', () => {
+        const child_id = 1;
+        const newSleep = {
+            notes: `good sleep`,
+            duration: '00:25:22',
+            sleep_type: 'calm',
+            sleep_category: 'bedtime',
+        };
+        return supertest(app)
+            .post(`/api/sleeping/all/${child_id}`)
+            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+            .send(newSleep)
+            .expect(201)
+            .expect(res => {
+                expect(res.body).to.have.property('id');
+                expect(res.body).to.have.property('date');
+                expect(res.body.notes).to.eql(newSleep.notes);
+                expect(res.body.duration).to.eql(newSleep.duration);
+                expect(res.body.sleep_type).to.eql(newSleep.sleep_type);
+                expect(res.body.sleep_category).to.eql(newSleep.sleep_category);
+                expect(res.body.child_id).to.eql(child_id);
+                expect(res.headers.location).to.eql(`/api/sleeping/all/${child_id}/${res.body.id}`);
+            })
+            .then(postRes =>
+                supertest(app)
+                    .get(`/api/sleeping/${postRes.body.id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(postRes.body)
+            );
+    });
+
+    const requiredFields = ['duration', 'sleep_type', 'sleep_category'];
+    requiredFields.forEach(field => {
+        const reqNewSleep = {
+            duration: '00:56:33',
+            sleep_type: 'calm',
+            sleep_category: 'nap',
+        };
+        it(`responds with 400 and an error when the '${field}' is missing`, () => {
+            delete reqNewSleep[field];
+            const child_id = 1;
             return supertest(app)
                 .post(`/api/sleeping/all/${child_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                .send(newSleep)
-                .expect(201)
-                .expect(res => {
-                    expect(res.body).to.have.property('id');
-                    expect(res.body).to.have.property('date');
-                    expect(res.body.notes).to.eql(newSleep.notes);
-                    expect(res.body.duration).to.eql(newSleep.duration);
-                    expect(res.body.sleep_type).to.eql(newSleep.sleep_type);
-                    expect(res.body.sleep_category).to.eql(newSleep.sleep_category);
-                    expect(res.body.child_id).to.eql(child_id);
-                    expect(res.headers.location).to.eql(
-                        `/api/sleeping/all/${child_id}/${res.body.id}`
-                    );
-                })
-                .then(postRes =>
-                    supertest(app)
-                        .get(`/api/sleeping/${postRes.body.id}`)
-                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                        .expect(postRes.body)
-                );
+                .send(reqNewSleep)
+                .expect(400, {
+                    error: { message: `Missing '${field}' in request body` },
+                });
         });
-
-        const requiredFields = ['duration', 'sleep_type', 'sleep_category'];
-        requiredFields.forEach(field => {
-            const reqNewSleep = {
-                duration: '00:56:33',
-                sleep_type: 'calm',
-                sleep_category: 'nap'
-            };
-            it(`responds with 400 and an error when the '${field}' is missing`, () => {
-                delete reqNewSleep[field];
-                const child_id = 1;
-                return supertest(app)
-                    .post(`/api/sleeping/all/${child_id}`)
-                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-                    .send(reqNewSleep)
-                    .expect(400, {
-                        error: { message: `Missing '${field}' in request body` },
-                    });
-            });
     });
 
     context('Given an xss attack', () => {
@@ -249,7 +247,7 @@ describe.only('sleeping-router endpoints', () => {
         });
 
         it(`GET /api/sleeping/all/:childId removes xss content`, () => {
-            const child_id = 1
+            const child_id = 1;
             return supertest(app)
                 .get(`/api/sleeping/all/${child_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))

@@ -227,14 +227,15 @@ function makeMaliciousMeals() {
 
 function makeMaliciousSleeps() {
     const maliciousSleep = {
-        notes: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        notes:
+            'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
         duration: '00:25:22',
         sleep_type: 'crying',
         sleep_category: 'bedtime',
         child_id: 1,
     };
     const expectedSleep = {
-        notes:`image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
+        notes: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
         duration: '00:25:22',
         sleep_type: 'crying',
         sleep_category: 'bedtime',
@@ -242,8 +243,8 @@ function makeMaliciousSleeps() {
     };
     return {
         maliciousSleep,
-        expectedSleep
-    }
+        expectedSleep,
+    };
 }
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {

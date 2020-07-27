@@ -1,9 +1,6 @@
 const xss = require('xss');
 
 const SleepingServcie = {
-    //   getAllSleep(db) {
-    //     return db.select("*").from("sleeping");
-    //   },
     insertSleep(db, newSleep) {
         return db
             .insert(newSleep)
