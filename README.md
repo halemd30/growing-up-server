@@ -1,6 +1,32 @@
+# Growing Up Server
+
+This is the api for our capstone project, called Growing Up.
+
+## Live App
+
+Deployed App: 
+
+## Summary
+
+
+## Technology Used
+
+Front End: HTML, CSS, JavaScript, React
+<br />
+Back End: Node, Express, PostresSQL
+
+## API Documentation
+
+### Authentication
+
+GrowingUp uses JWT tokens, required on the children, eating, and sleeping endpoint requests. The tokens are created upon a users login and sent in the response body.
+
 # API Endpoints:
 
 <!-- contract - whats required from the frontend -->
+## /
+
+-   This endpoint allows you to test your connection to the server. It will send a response containing 'The good stuff' if you have connected sucessfully. It is not protected.
 
 ## /api/users endpoint:
 
@@ -120,3 +146,5 @@ removes specific sleep data from database
 ### PATCH '/:sleepId
 
 returns sleep duration, sleep_type, and sleep_category when 'stop' button is hit
+
+## Screenshots
