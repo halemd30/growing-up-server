@@ -73,10 +73,12 @@ sleepingRouter
 .get((req, res, next) => {
     res.json(SleepingServcie.serializeSleep(res.sleep));
 })
-//   .delete((req, res, next) => {
-//     const id = parseInt(req.params.sleepId);
-//     SleepingService.deleteSleep(db, id).then(req.status(204).end()).catch(next);
-//   })
+  .delete((req, res, next) => {
+    const db = req.app.get('db');
+
+    const id = req.params.sleepId;
+    SleepingService.deleteSleep(db, id).then(res.status(204).end()).catch(next);
+  })
 //   .patch((req, res) => {
 //     const id = req.params.sleepId;
 //     const currentDate = new Date();

@@ -142,25 +142,25 @@ describe.only('sleeping-router endpoints', () => {
     //                 },
     //             });
     //     });
-    //     it('DELETE /api/eating/:mealId responds with 204 and removes the meal', () => {
-    //         const meal_id = 2;
-    //         return supertest(app)
-    //             .delete(`/api/eating/${meal_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .expect(204);
-    //     });
+        it('DELETE /api/sleeping/:sleepId responds with 204 and removes the sleep instance', () => {
+            const sleep_id = 2;
+            return supertest(app)
+                .delete(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(204);
+        });
     });
 
     context('Given no sleeps in the database', () => {
-    //         it('DELETE /api/eating/:mealId responds with 404', () => {
-    //             const meal_id = 1;
-    //             return supertest(app)
-    //                 .delete(`/api/eating/${meal_id}`)
-    //                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                 .expect(404, {
-    //                     error: { message: 'Sleep instance does not exist' },
-    //                 });
-    //         });
+            it('DELETE /api/sleeping/:sleepId responds with 404', () => {
+                const sleep_id = 1;
+                return supertest(app)
+                    .delete(`/api/sleeping/${sleep_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(404, {
+                        error: { message: 'Sleep instance does not exist' },
+                    });
+            });
             it(`GET /api/sleeping/all responds with 200 and an empty list`, () => {
                 const child_id = 1;
                 return supertest(app)
