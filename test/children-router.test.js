@@ -3,7 +3,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./testHelpers');
 
-describe('children-router endpoints', () => {
+describe.only('children-router endpoints', () => {
     let db;
     let testUsers = helpers.makeTestUsers();
     let testChildren = helpers.makeTestChildren();
@@ -140,7 +140,7 @@ describe('children-router endpoints', () => {
                         error: { message: 'Child does not exist' },
                     });
             });
-            it(`responds with 200 and an empty list`, () => {
+            it(`GET /api/children responds with 200 and an empty list`, () => {
                 return supertest(app)
                     .get('/api/children')
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))

@@ -46,10 +46,10 @@ childrenRouter
   });
 
 childrenRouter
-  .route("/:childrenId")
+  .route("/:childId")
   .all(requireAuth, jsonParser, (req, res, next) => {
     const db = req.app.get("db");
-    const child_id = req.params.childrenId;
+    const child_id = req.params.childId;
 
     ChildrenService.getById(db, child_id)
       .then((child) => {
@@ -69,7 +69,7 @@ childrenRouter
   .delete((req, res, next) => {
     const db = req.app.get("db");
 
-    const id = req.params.childrenId;
+    const id = req.params.childId;
     ChildrenService.deleteChildren(db, id)
       .then(res.status(204).end())
       .catch(next);
@@ -77,7 +77,7 @@ childrenRouter
   .patch((req, res, next) => {
     const db = req.app.get("db");
     const { first_name, age } = req.body;
-    const child_id = req.params.childrenId;
+    const child_id = req.params.childId;
 
     const updatedChildren = {
       first_name,

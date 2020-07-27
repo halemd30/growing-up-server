@@ -72,24 +72,24 @@ required:
 
 returns 201 adding child to the database
 
-### GET '/:childrenId'
+### GET '/:childId'
 
 required: 
-- childrenId, passed as a string parameter
+- childId, passed as a string parameter
 
 returns specific child data
 
-### DELETE '/:childrenId'
+### DELETE '/:childId'
 
 required: 
-- childrenId, passed as a string parameter
+- childId, passed as a string parameter
 
 removes specific child from database
 
-### PATCH '/:childrenId'
+### PATCH '/:childId'
 
 required:
-- childrenId, passed as a string parameter
+- childId, passed as a string parameter
 - change at least 1 value for first_name and age
 
 returns the updated child's first_name and age
