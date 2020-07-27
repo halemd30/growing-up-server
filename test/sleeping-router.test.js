@@ -177,7 +177,7 @@ describe.only('sleeping-router endpoints', () => {
                         error: { message: 'Sleep instance does not exist' },
                     });
             });
-            it.only('PATCH /api/sleeping/:sleepId responds with 404', () => {
+            it('PATCH /api/sleeping/:sleepId responds with 404', () => {
                 const sleep_id = 1;
                 return supertest(app)
                     .patch(`/api/sleeping/${sleep_id}`)
@@ -188,56 +188,57 @@ describe.only('sleeping-router endpoints', () => {
             });
         });
 
-    //     it('POST /api/eating/all responds with 201 and the new meal', () => {
-    //         const child_id = 1;
-    //         const newMeal = {
-    //             notes: 'fussy',
-    //             duration: '00:15:22',
-    //             food_type: 'breast_fed',
-    //             side_fed: 'left',
-    //         };
-    //         return supertest(app)
-    //             .post(`/api/eating/all/${child_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(newMeal)
-    //             .expect(201)
-    //             .expect(res => {
-    //                 expect(res.body).to.have.property('id');
-    //                 expect(res.body).to.have.property('date');
-    //                 expect(res.body.notes).to.eql(newMeal.notes);
-    //                 expect(res.body.duration).to.eql(newMeal.duration);
-    //                 expect(res.body.food_type).to.eql(newMeal.food_type);
-    //                 expect(res.body.side_fed).to.eql(newMeal.side_fed);
-    //                 expect(res.body.child_id).to.eql(child_id);
-    //                 expect(res.headers.location).to.eql(
-    //                     `/api/eating/all/${child_id}/${res.body.id}`
-    //                 );
-    //             })
-    //             .then(postRes =>
-    //                 supertest(app)
-    //                     .get(`/api/eating/${postRes.body.id}`)
-    //                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                     .expect(postRes.body)
-    //             );
-    //     });
+        it('POST /api/sleeping/all responds with 201 and the new sleep instance', () => {
+            const child_id = 1;
+            const newSleep = {
+                notes:`good sleep`,
+                duration: '00:25:22',
+                sleep_type: 'calm',
+                sleep_category: 'bedtime',
+            };
+            return supertest(app)
+                .post(`/api/sleeping/all/${child_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(newSleep)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body).to.have.property('date');
+                    expect(res.body.notes).to.eql(newSleep.notes);
+                    expect(res.body.duration).to.eql(newSleep.duration);
+                    expect(res.body.sleep_type).to.eql(newSleep.sleep_type);
+                    expect(res.body.sleep_category).to.eql(newSleep.sleep_category);
+                    expect(res.body.child_id).to.eql(child_id);
+                    expect(res.headers.location).to.eql(
+                        `/api/sleeping/all/${child_id}/${res.body.id}`
+                    );
+                })
+                .then(postRes =>
+                    supertest(app)
+                        .get(`/api/sleeping/${postRes.body.id}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                        .expect(postRes.body)
+                );
+        });
 
-    //     const requiredFields = ['duration', 'food_type'];
-    //     requiredFields.forEach(field => {
-    //         const reqNewMeal = {
-    //             duration: '00:56:33',
-    //             food_type: 'bottle',
-    //         };
-    //         it(`responds with 400 and an error when the '${field}' is missing`, () => {
-    //             delete reqNewMeal[field];
-    //             const child_id = 1;
-    //             return supertest(app)
-    //                 .post(`/api/eating/all/${child_id}`)
-    //                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                 .send(reqNewMeal)
-    //                 .expect(400, {
-    //                     error: { message: `Missing '${field}' in request body` },
-    //                 });
-    //         });
+        const requiredFields = ['duration', 'sleep_type', 'sleep_category'];
+        requiredFields.forEach(field => {
+            const reqNewSleep = {
+                duration: '00:56:33',
+                sleep_type: 'calm',
+                sleep_category: 'nap'
+            };
+            it(`responds with 400 and an error when the '${field}' is missing`, () => {
+                delete reqNewSleep[field];
+                const child_id = 1;
+                return supertest(app)
+                    .post(`/api/sleeping/all/${child_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .send(reqNewSleep)
+                    .expect(400, {
+                        error: { message: `Missing '${field}' in request body` },
+                    });
+            });
     });
 
     context('Given an xss attack', () => {
@@ -279,22 +280,22 @@ describe.only('sleeping-router endpoints', () => {
                     expect(res.body.child_id).to.eql(expectedSleep.child_id);
                 });
         });
-    //     it(`POST /api/eating/all removes xss content`, () => {
-    //         const child_id = 1;
-    //         return supertest(app)
-    //             .post(`/api/eating/all/${child_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(maliciousMeal)
-    //             .expect(201)
-    //             .expect(res => {
-    //                 expect(res.body).to.have.property('id');
-    //                 expect(res.body).to.have.property('date');
-    //                 expect(res.body.notes).to.eql(expectedMeal.notes);
-    //                 expect(res.body.duration).to.eql(expectedMeal.duration);
-    //                 expect(res.body.food_type).to.eql(expectedMeal.food_type);
-    //                 expect(res.body.side_fed).to.eql(expectedMeal.side_fed);
-    //                 expect(res.body.child_id).to.eql(expectedMeal.child_id);
-    //             });
-        // });
-    // });
+        it(`POST /api/sleeping/all removes xss content`, () => {
+            const child_id = 1;
+            return supertest(app)
+                .post(`/api/sleeping/all/${child_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(maliciousSleep)
+                .expect(201)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body).to.have.property('date');
+                    expect(res.body.notes).to.eql(expectedSleep.notes);
+                    expect(res.body.duration).to.eql(expectedSleep.duration);
+                    expect(res.body.sleep_type).to.eql(expectedSleep.sleep_type);
+                    expect(res.body.sleep_category).to.eql(expectedSleep.sleep_category);
+                    expect(res.body.child_id).to.eql(expectedSleep.child_id);
+                });
+        });
+    });
 });
