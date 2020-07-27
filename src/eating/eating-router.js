@@ -33,7 +33,7 @@ eatingRouter
             })
             .catch(next);
     })
-    .post(jsonParser, (req, res) => {
+    .post(requireAuth, jsonParser, (req, res) => {
         const { notes, duration, food_type, side_fed } = req.body;
         const db = req.app.get('db');
         const newMeal = {
@@ -44,7 +44,7 @@ eatingRouter
             side_fed,
         };
 
-        const requiredValues = {duration, food_type}
+        const requiredValues = { duration, food_type };
 
         for (const [key, value] of Object.entries(requiredValues))
             if (value == null)
@@ -86,18 +86,28 @@ eatingRouter
 
         const id = parseInt(req.params.mealId);
         EatingService.deleteMeal(db, id).then(res.status(204).end()).catch(next);
+    })
+    .patch((req, res, next) => {
+        const db = req.app.get('db');
+
+        const id = req.params.mealId;
+        const { notes, duration, food_type, side_fed } = req.body;
+
+        const editedMeal = {
+            notes,
+            duration,
+            food_type,
+            side_fed,
+        };
+
+        const values = Object.values(editedMeal).filter(Boolean).length;
+        if (values === 0) {
+            return res.status(400).json({
+                error: { message: `Request body must contain value to update` },
+            });
+        }
+
+        EatingService.updateEndMeal(db, id, editedMeal).then(res.status(201).end()).catch(next);
     });
-//   .patch((req, res, next) => {
-//     const id = parseInt(req.params.mealId);
-//     const currentDate = new Date();
-//     const duration = currentDate - req.params.date;
-//     EatingService.updateEndMeal(db, id, {
-//       duration: duration,
-//       food_type: req.params.food_type,
-//       side_fed: req.params.side_fed,
-//     })
-//       .then(res.status(204).end())
-//       .catch(next);
-//   });
 
 module.exports = eatingRouter;
