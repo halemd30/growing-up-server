@@ -4,7 +4,7 @@ const app = require('../src/app');
 const helpers = require('./testHelpers');
 const assert = require('assert');
 
-describe.only('eating-router endpoints', () => {
+describe('eating-router endpoints', () => {
     let db;
     let testUsers = helpers.makeTestUsers();
     let testChildren = helpers.makeTestChildren();
@@ -58,7 +58,7 @@ describe.only('eating-router endpoints', () => {
                     expect(res.body[1].child_id).to.eql(expectedmeals[1].child_id);
                 });
         });
-        it('GET /api/children/:mealId responds with 200 and requested meal', () => {
+        it('GET /api/eating/:mealId responds with 200 and requested meal', () => {
             const meal_id = 1;
             const expectedMeal = testMeals[meal_id - 1];
             return supertest(app)
@@ -82,7 +82,7 @@ describe.only('eating-router endpoints', () => {
                 duration: '00:15:22',
                 food_type: 'breast_fed',
                 side_fed: 'left',
-                child_id: 1
+                child_id: 1,
             };
             return supertest(app)
                 .patch(`/api/eating/${meal_id}`)
@@ -109,7 +109,7 @@ describe.only('eating-router endpoints', () => {
             const editedMeal = {
                 food_type: 'breast_fed',
             };
-            const mealToChange = testMeals[meal_id-1]
+            const mealToChange = testMeals[meal_id - 1];
             return supertest(app)
                 .patch(`/api/eating/${meal_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -163,7 +163,7 @@ describe.only('eating-router endpoints', () => {
                     });
             });
             it(`GET /api/eating/all responds with 200 and an empty list`, () => {
-                const child_id = 1
+                const child_id = 1;
                 return supertest(app)
                     .get(`/api/eating/all/${child_id}`)
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -190,7 +190,7 @@ describe.only('eating-router endpoints', () => {
         });
 
         it('POST /api/eating/all responds with 201 and the new meal', () => {
-            const child_id = 1
+            const child_id = 1;
             const newMeal = {
                 notes: 'fussy',
                 duration: '00:15:22',
@@ -210,7 +210,9 @@ describe.only('eating-router endpoints', () => {
                     expect(res.body.food_type).to.eql(newMeal.food_type);
                     expect(res.body.side_fed).to.eql(newMeal.side_fed);
                     expect(res.body.child_id).to.eql(child_id);
-                    expect(res.headers.location).to.eql(`/api/eating/all/${child_id}/${res.body.id}`);
+                    expect(res.headers.location).to.eql(
+                        `/api/eating/all/${child_id}/${res.body.id}`
+                    );
                 })
                 .then(postRes =>
                     supertest(app)
@@ -228,7 +230,7 @@ describe.only('eating-router endpoints', () => {
             };
             it(`responds with 400 and an error when the '${field}' is missing`, () => {
                 delete reqNewMeal[field];
-                const child_id = 1
+                const child_id = 1;
                 return supertest(app)
                     .post(`/api/eating/all/${child_id}`)
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -279,7 +281,7 @@ describe.only('eating-router endpoints', () => {
                 });
         });
         it(`POST /api/eating/all removes xss content`, () => {
-            const child_id = 1
+            const child_id = 1;
             return supertest(app)
                 .post(`/api/eating/all/${child_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))

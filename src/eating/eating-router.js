@@ -8,19 +8,6 @@ const moment = require('moment');
 
 const eatingRouter = express.Router();
 
-// eatingRouter.route('/').get((req, res, next) => {
-//     const db = req.app.get('db');
-//     EatingService.getAllMeals(db)
-//         .then(meals => {
-//             console.log(meals)
-//             res.json(meals.map(EatingService.serializeMeal));
-//         })
-//         .catch(next);
-// });
-
-//add to each
-// const db = req.app.get("db");
-
 eatingRouter
     .route('/all/:childId')
     .get(requireAuth, jsonParser, (req, res, next) => {
@@ -107,7 +94,7 @@ eatingRouter
             });
         }
 
-        EatingService.updateEndMeal(db, id, editedMeal).then(res.status(201).end()).catch(next);
+        EatingService.updateMeal(db, id, editedMeal).then(res.status(201).end()).catch(next);
     });
 
 module.exports = eatingRouter;

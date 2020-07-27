@@ -47,30 +47,30 @@ function makeTestMeals() {
             duration: '00:25:22',
             food_type: 'bottle',
             side_fed: '',
-            child_id: 1
+            child_id: 1,
         },
         {
             notes: 'good job',
             duration: '01:25:22',
             food_type: 'breast_fed',
             side_fed: 'right',
-            child_id: 1
+            child_id: 1,
         },
         {
             notes: '',
             duration: '00:05:22',
             food_type: 'formula',
             side_fed: '',
-            child_id: 2
+            child_id: 2,
         },
         {
             notes: 'fussy',
             duration: '00:15:22',
             food_type: 'breast_fed',
             side_fed: 'left',
-            child_id: 2
+            child_id: 2,
         },
-    ]
+    ];
 }
 
 function cleanAllTables(db) {
@@ -171,10 +171,12 @@ function makeMaliciousChild() {
 
 function makeMaliciousMeals() {
     const maliciousMeal = {
-        notes: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        notes:
+            'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
         duration: '00:25:22',
         food_type: 'bottle',
-        side_fed: 'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
+        side_fed:
+            'image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.',
         child_id: 1,
     };
     const expectedMeal = {
@@ -183,7 +185,7 @@ function makeMaliciousMeals() {
         food_type: 'bottle',
         side_fed: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
         child_id: 1,
-    }; 
+    };
     return {
         maliciousMeal,
         expectedMeal,

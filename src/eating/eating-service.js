@@ -1,9 +1,6 @@
 const xss = require('xss');
 
 const EatingService = {
-    // getAllMeals(db) {
-    //     return db.select('*').from('eating');
-    // },
     insertMeal(db, newMeal) {
         return db
             .insert(newMeal)
@@ -22,7 +19,7 @@ const EatingService = {
     deleteMeal(db, id) {
         return db.from('eating').where({ id }).delete();
     },
-    updateEndMeal(db, id, endMeal) {
+    updateMeal(db, id, endMeal) {
         return db.from('eating').where({ id }).update(endMeal);
     },
     serializeMeal(meal) {
