@@ -14,30 +14,31 @@ const sleepingRouter = express.Router();
 //     });
 // });
 
-sleepingRouter
-    .route('/all/:childId')
-    .get(requireAuth, (req, res, next) => {
+sleepingRouter.route('/all/:childId').get(requireAuth, (req, res, next) => {
     const db = req.app.get('db');
-
     const id = req.params.childId;
-    
+
     SleepingService.getByChildId(db, id)
         .then(childSleep => {
             res.json(childSleep.map(SleepingService.serializeSleep));
         })
         .catch(next);
 });
-//   .post((req, res) => {
+//   .post(requireAuth, jsonParser, (req, res) => {
+//     const db = req.app.get('db');
+
 //     const { notes, duration, sleep_type, sleep_category } = req.body;
 //     const newSleep = {
-//       child_id: req.child_id,
+//       child_id: req.params.child_id,
 //       notes,
 //       duration,
 //       sleep_type,
 //       sleep_category,
 //     };
 
-//     for (const [key, value] of Object.entries(newSleep))
+//     const requiredValues = { duration, sleep_type, sleep_category}
+
+//     for (const [key, value] of Object.entries(requiredValues))
 //       if (value == null)
 //         return res.status(400).json({
 //           error: { message: `Missing '${key}' in request body` },
@@ -52,42 +53,55 @@ sleepingRouter
 //   });
 
 sleepingRouter
-  .route("/:sleepId")
-  .all(requireAuth, jsonParser, (req, res, next) => {
-    const db = req.app.get('db');
+    .route('/:sleepId')
+    .all(requireAuth, jsonParser, (req, res, next) => {
+        const db = req.app.get('db');
 
-    const sleep_id = req.params.sleepId;
+        const sleep_id = req.params.sleepId;
 
-    SleepingServcie.getById(db, sleep_id)
-        .then(sleep => {
-            if (!sleep) {
-                return res.status(404).json({
-                    error: { message: 'Sleep instance does not exist' },
-                });
-            }
-            res.sleep = sleep;
-            next();
-        })
-        .catch(next);
-})
-.get((req, res, next) => {
-    res.json(SleepingServcie.serializeSleep(res.sleep));
-})
-  .delete((req, res, next) => {
-    const db = req.app.get('db');
+        SleepingServcie.getById(db, sleep_id)
+            .then(sleep => {
+                if (!sleep) {
+                    return res.status(404).json({
+                        error: { message: 'Sleep instance does not exist' },
+                    });
+                }
+                res.sleep = sleep;
+                next();
+            })
+            .catch(next);
+    })
+    .get((req, res, next) => {
+        res.json(SleepingServcie.serializeSleep(res.sleep));
+    })
+    .delete((req, res, next) => {
+        const db = req.app.get('db');
 
-    const id = req.params.sleepId;
-    SleepingService.deleteSleep(db, id).then(res.status(204).end()).catch(next);
-  })
-//   .patch((req, res) => {
-//     const id = req.params.sleepId;
-//     const currentDate = new Date();
-//     const duration = currentDate - req.params.Date;
-//     SleepingService.updateSleep(db, id, {
-//       duration: duration,
-//       sleep_type: req.params.sleep_type,
-//       sleep_category: req.params.sleep_category,
-//     }).then(res.status(204).end());
-//   });
+        const id = req.params.sleepId;
+        SleepingService.deleteSleep(db, id).then(res.status(204).end()).catch(next);
+    })
+    .patch((req, res) => {
+        const db = req.app.get('db');
+        const id = req.params.sleepId;
+        const { notes, duration, sleep_type, sleep_category } = req.body
+        
+        const editedSleep = {
+            notes,
+            duration,
+            sleep_type, 
+            sleep_category
+        }
+
+
+        const values = Object.values(editedSleep).filter(Boolean).length;
+        if (values === 0) {
+            return res.status(400).json({
+                error: { message: `Request body must contain value to update` },
+            });
+        }
+
+        SleepingService.updateSleep(db, id, editedSleep)
+            .then(res.status(201).end());
+    });
 
 module.exports = sleepingRouter;

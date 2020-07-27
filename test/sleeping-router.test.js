@@ -75,73 +75,73 @@ describe.only('sleeping-router endpoints', () => {
                     expect(res.body.child_id).to.eql(expectedSleep.child_id);
                 });
         });
-    //     it('PATCH /api/eating/:mealId responds with 204, updates meal', () => {
-    //         const meal_id = 1;
-    //         const editedMeal = {
-    //             notes: 'fussy',
-    //             duration: '00:15:22',
-    //             food_type: 'breast_fed',
-    //             side_fed: 'left',
-    //             child_id: 1,
-    //         };
-    //         return supertest(app)
-    //             .patch(`/api/eating/${meal_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(editedMeal)
-    //             .expect(201)
-    //             .then(res =>
-    //                 supertest(app)
-    //                     .get(`/api/eating/${meal_id}`)
-    //                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                     .expect(res => {
-    //                         expect(res.body).to.have.property('id');
-    //                         expect(res.body).to.have.property('date');
-    //                         expect(res.body.notes).to.eql(editedMeal.notes);
-    //                         expect(res.body.duration).to.eql(editedMeal.duration);
-    //                         expect(res.body.food_type).to.eql(editedMeal.food_type);
-    //                         expect(res.body.side_fed).to.eql(editedMeal.side_fed);
-    //                         expect(res.body.child_id).to.eql(editedMeal.child_id);
-    //                     })
-    //             );
-    //     });
-    //     it('PATCH /api/eating/:mealId responds with 204 when updating a subset of fields', () => {
-    //         const meal_id = 1;
-    //         const editedMeal = {
-    //             food_type: 'breast_fed',
-    //         };
-    //         const mealToChange = testMeals[meal_id - 1];
-    //         return supertest(app)
-    //             .patch(`/api/eating/${meal_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send(editedMeal)
-    //             .expect(201)
-    //             .then(res =>
-    //                 supertest(app)
-    //                     .get(`/api/eating/${meal_id}`)
-    //                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                     .expect(res => {
-    //                         expect(res.body).to.have.property('id');
-    //                         expect(res.body).to.have.property('date');
-    //                         expect(res.body.notes).to.eql(mealToChange.notes);
-    //                         expect(res.body.duration).to.eql(mealToChange.duration);
-    //                         expect(res.body.food_type).to.eql(editedMeal.food_type);
-    //                         expect(res.body.side_fed).to.eql(mealToChange.side_fed);
-    //                         expect(res.body.child_id).to.eql(mealToChange.child_id);
-    //                     })
-    //             );
-    //     });
-    //     it('PATCH /api/eating/:mealId responds 400 when no required fields are given', () => {
-    //         const meal_id = 1;
-    //         return supertest(app)
-    //             .patch(`/api/eating/${meal_id}`)
-    //             .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //             .send({ childrenId: 1 })
-    //             .expect(400, {
-    //                 error: {
-    //                     message: 'Request body must contain value to update',
-    //                 },
-    //             });
-    //     });
+        it('PATCH /api/sleeping/:sleepId responds with 204, updates sleep instance', () => {
+            const sleep_id = 1;
+            const editedSleep = {
+                notes:`good sleep`,
+                duration: '00:25:22',
+                sleep_type: 'calm',
+                sleep_category: 'bedtime',
+                child_id: 1,
+            };
+            return supertest(app)
+                .patch(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(editedSleep)
+                .expect(201)
+                .then(res =>
+                    supertest(app)
+                        .get(`/api/sleeping/${sleep_id}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                        .expect(res => {
+                            expect(res.body).to.have.property('id');
+                            expect(res.body).to.have.property('date');
+                            expect(res.body.notes).to.eql(editedSleep.notes);
+                            expect(res.body.duration).to.eql(editedSleep.duration);
+                            expect(res.body.sleep_type).to.eql(editedSleep.sleep_type);
+                            expect(res.body.sleep_category).to.eql(editedSleep.sleep_category);
+                            expect(res.body.child_id).to.eql(editedSleep.child_id);
+                        })
+                );
+        });
+        it('PATCH /api/sleeping/:sleepId responds with 204 when updating a subset of fields', () => {
+            const sleep_id = 1;
+            const editedSleep = {
+                sleep_category: 'bedtime',
+            };
+            const sleepToChange = testSleeps[sleep_id - 1];
+            return supertest(app)
+                .patch(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send(editedSleep)
+                .expect(201)
+                .then(res =>
+                    supertest(app)
+                        .get(`/api/sleeping/${sleep_id}`)
+                        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                        .expect(res => {
+                            expect(res.body).to.have.property('id');
+                            expect(res.body).to.have.property('date');
+                            expect(res.body.notes).to.eql(sleepToChange.notes);
+                            expect(res.body.duration).to.eql(sleepToChange.duration);
+                            expect(res.body.sleep_type).to.eql(sleepToChange.sleep_type);
+                            expect(res.body.sleep_category).to.eql(sleepToChange.sleep_category);
+                            expect(res.body.child_id).to.eql(sleepToChange.child_id);
+                        })
+                );
+        });
+        it('PATCH /api/sleeping/:sleepId responds 400 when no required fields are given', () => {
+            const sleep_id = 1;
+            return supertest(app)
+                .patch(`/api/sleeping/${sleep_id}`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .send({ childrenId: 1 })
+                .expect(400, {
+                    error: {
+                        message: 'Request body must contain value to update',
+                    },
+                });
+        });
         it('DELETE /api/sleeping/:sleepId responds with 204 and removes the sleep instance', () => {
             const sleep_id = 2;
             return supertest(app)
@@ -177,16 +177,16 @@ describe.only('sleeping-router endpoints', () => {
                         error: { message: 'Sleep instance does not exist' },
                     });
             });
-    //         it('PATCH /api/eating/:mealId responds with 404', () => {
-    //             const meal_id = 1;
-    //             return supertest(app)
-    //                 .patch(`/api/eating/${meal_id}`)
-    //                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //                 .expect(404, {
-    //                     error: { message: 'Sleep instance does not exist' },
-    //                 });
-    //         });
-    //     });
+            it.only('PATCH /api/sleeping/:sleepId responds with 404', () => {
+                const sleep_id = 1;
+                return supertest(app)
+                    .patch(`/api/sleeping/${sleep_id}`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(404, {
+                        error: { message: 'Sleep instance does not exist' },
+                    });
+            });
+        });
 
     //     it('POST /api/eating/all responds with 201 and the new meal', () => {
     //         const child_id = 1;
@@ -296,5 +296,5 @@ describe.only('sleeping-router endpoints', () => {
     //                 expect(res.body.child_id).to.eql(expectedMeal.child_id);
     //             });
         // });
-    });
+    // });
 });
