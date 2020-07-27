@@ -44,49 +44,36 @@ describe('auth endpoints', () => {
         });
         it(`responds 400 'invalid username or password' when bad username`, () => {
             const invalidUsername = { username: 'nope', password: 'good' };
-            return supertest(app)
-                .post('/api/auth/login')
-                .send(invalidUsername)
-                .expect(400, {
-                    error: 'Incorrect username or password',
-                });
+            return supertest(app).post('/api/auth/login').send(invalidUsername).expect(400, {
+                error: 'Incorrect username or password',
+            });
         });
         it(`responds 400 'invalid username or password' when bad password`, () => {
             const invalidPass = {
                 username: testUsers[0].username,
                 password: 'bad',
             };
-            return supertest(app)
-                .post('/api/auth/login')
-                .send(invalidPass)
-                .expect(400, {
-                    error: 'Incorrect username or password',
-                });
+            return supertest(app).post('/api/auth/login').send(invalidPass).expect(400, {
+                error: 'Incorrect username or password',
+            });
         });
 
         it('responds 200 and JWT auth token using secret when valid credentials', function () {
-            this.retries(3)
+            this.retries(3);
 
             const userValidCreds = {
                 username: testUsers[0].username,
                 password: testUsers[0].password,
             };
 
-            const expectedToken = jwt.sign(
-                { user_id: testUsers[0].id },
-                process.env.JWT_SECRET,
-                {
-                    subject: testUsers[0].username,
-                    algorithm: 'HS256',
-                }
-            );
+            const expectedToken = jwt.sign({ user_id: testUsers[0].id }, process.env.JWT_SECRET, {
+                subject: testUsers[0].username,
+                algorithm: 'HS256',
+            });
 
-            return supertest(app)
-                .post('/api/auth/login')
-                .send(userValidCreds)
-                .expect(200, {
-                    authToken: expectedToken,
-                });
+            return supertest(app).post('/api/auth/login').send(userValidCreds).expect(200, {
+                authToken: expectedToken,
+            });
         });
     });
 });
