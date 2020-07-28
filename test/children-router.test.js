@@ -140,7 +140,7 @@ describe('children-router endpoints', () => {
                         error: { message: 'Child does not exist' },
                     });
             });
-            it(`responds with 200 and an empty list`, () => {
+            it(`GET /api/children responds with 200 and an empty list`, () => {
                 return supertest(app)
                     .get('/api/children')
                     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))

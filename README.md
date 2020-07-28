@@ -1,6 +1,32 @@
+# Growing Up Server
+
+This is the api for our capstone project, called Growing Up.
+
+## Live App
+
+Deployed App:
+
+## Summary
+
+## Technology Used
+
+Front End: HTML, CSS, JavaScript, React
+<br />
+Back End: Node, Express, PostresSQL
+
+## API Documentation
+
+### Authentication
+
+GrowingUp uses JWT tokens, required on the children, eating, and sleeping endpoint requests. The tokens are created upon a users login and sent in the response body. All protected endpoints pull user_id from the JWT token give at login, and only return data specific to that user.
+
 # API Endpoints:
 
 <!-- contract - whats required from the frontend -->
+
+## '/'
+
+-   This endpoint allows you to test your connection to the server. It will send a response containing 'The good stuff' if you have connected sucessfully. It is not protected.
 
 ## /api/users endpoint:
 
@@ -46,77 +72,112 @@ required:
 
 returns 201 adding child to the database
 
-### GET '/:childrenId'
+### GET '/:childId'
+
+required:
+
+-   childId, passed as a string parameter
 
 returns specific child data
 
-### DELETE '/:childrenId'
+### DELETE '/:childId'
+
+required:
+
+-   childId, passed as a string parameter
 
 removes specific child from database
 
-### PATCH '/:childrenId'
+### PATCH '/:childId'
 
 required:
 
--   change at least 1 value for name and age
--   returns the updated child's name and age
+-   childId, passed as a string parameter
+-   change at least 1 value for first_name and age
+
+returns the updated child's first_name and age
 
 ## /api/eating endpoints:
 
-### GET '/'
-
-returns meal data for all children
-
-### GET '/:childId'
-
-returns meal data for a specific child
-
-### POST '/:childId'
+### GET '/all/:childId'
 
 required:
 
--   duration (time or integer?)
--   food_type (enum)
--   side_fed (string)
+-   childId, passed as a string parameter
+    returns all meal data for a specific child
+
+### POST '/all/:childId'
+
+required:
+
+-   childId - passed as a string parameter
+-   duration (time)
+-   food_type (enum: 'bottle', 'breast_fed', 'formula')
     optional:
+-   side_fed (string)
 -   notes (string)
 
-returns meal data
+returns meal data created
 
 ### DELETE '/:mealId'
 
-removes specific meal from database
+required:
+
+-   mealId, passed as a string parameter
+    removes specific meal from database
 
 ### PATCH '/:mealId'
 
-returns meal duration, food_type, and side_fed when 'stop' button is hit
+required:
+
+-   childId, passed as a string parameter
+-   one of the values (notes, duration, food_type, side_fed) must be changed
+
+returns 201 and updates
 
 ## /api/sleeping endpoints:
 
-### GET '/'
-
-returns sleep data for all children
-
-### GET '/:childId'
-
-returns sleep data for a specific child
-
-### POST '/:childId'
+### GET '/all/:childId'
 
 required:
 
--   duration (time or integer?)
--   sleep_type (enum)
--   sleep_category (enum)
+-   childId, passed as a string parameter
+    returns all sleep data for a specific child
+
+### GET '/:sleepId'
+
+required:
+
+-   sleepId, passed as a string parameter
+    returns sleep data for a specific child
+
+### POST '/all/:childId'
+
+required:
+
+-   childId, passed as a string parameter
+-   duration (time)
+-   sleep_type (enum: 'crying','restless','calm')
+-   sleep_category (enum: 'nap','bedtime')
     optional:
 -   notes (string)
 
-returns sleep data
+returns new sleep data
 
 ### DELETE '/:sleepId'
 
-removes specific sleep data from database
+required:
+
+-   sleepId, passed as a string parameter
+    removes specific sleep data from database
 
 ### PATCH '/:sleepId
 
-returns sleep duration, sleep_type, and sleep_category when 'stop' button is hit
+required:
+
+-   sleepId, passed as a string parameter
+-   one of the values (notes, duration, sleep_type, sleep_category) must be changed
+
+returns 201 and updates
+
+## Screenshots

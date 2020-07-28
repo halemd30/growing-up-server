@@ -1,39 +1,40 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const SleepingService = require('./sleeping-service');
+const jsonParser = express.json();
+const { requireAuth } = require('../middleware/jwt-auth');
+const SleepingServcie = require('./sleeping-service');
 
 const sleepingRouter = express.Router();
 
-sleepingRouter.route('/').get((req, res) => {
-    const db = req.app.get('db');
-    SleepingService.getAllSleep(db).then((sleep) => {
-        res.json(sleep.map(SleepingService.serializeSleep));
-    });
-});
-
 sleepingRouter
-    .route('/:childId')
-    .get((req, res, next) => {
+    .route('/all/:childId')
+    .get(requireAuth, (req, res, next) => {
         const db = req.app.get('db');
-        const id = parseInt(req.params.childId);
+        const id = req.params.childId;
+
         SleepingService.getByChildId(db, id)
             .then((childSleep) => {
                 res.json(childSleep.map(SleepingService.serializeSleep));
             })
             .catch(next);
     })
-    .post((req, res) => {
+    .post(requireAuth, jsonParser, (req, res) => {
         const db = req.app.get('db');
+
         const { notes, duration, sleep_type, sleep_category } = req.body;
         const newSleep = {
-            child_id: req.child_id,
+            child_id: req.params.childId,
             notes,
             duration,
             sleep_type,
             sleep_category
         };
 
-        for (const [key, value] of Object.entries(newSleep))
+        const requiredValues = { duration, sleep_type, sleep_category };
+
+        for (const [key, value] of Object.entries(requiredValues))
             if (value == null)
                 return res.status(400).json({
                     error: { message: `Missing '${key}' in request body` }
@@ -48,23 +49,56 @@ sleepingRouter
 
 sleepingRouter
     .route('/:sleepId')
+    .all(requireAuth, jsonParser, (req, res, next) => {
+        const db = req.app.get('db');
+
+        const sleep_id = req.params.sleepId;
+
+        SleepingServcie.getById(db, sleep_id)
+            .then((sleep) => {
+                if (!sleep) {
+                    return res.status(404).json({
+                        error: { message: 'Sleep instance does not exist' }
+                    });
+                }
+                res.sleep = sleep;
+                next();
+            })
+            .catch(next);
+    })
+    .get((req, res, next) => {
+        res.json(SleepingServcie.serializeSleep(res.sleep));
+    })
     .delete((req, res, next) => {
         const db = req.app.get('db');
-        const id = parseInt(req.params.sleepId);
+
+        const id = req.params.sleepId;
         SleepingService.deleteSleep(db, id)
-            .then(req.status(204).end())
+            .then(res.status(204).end())
             .catch(next);
     })
     .patch((req, res) => {
         const db = req.app.get('db');
         const id = req.params.sleepId;
-        const currentDate = new Date();
-        const duration = currentDate - req.params.Date;
-        SleepingService.updateSleep(db, id, {
-            duration: duration,
-            sleep_type: req.params.sleep_type,
-            sleep_category: req.params.sleep_category
-        }).then(res.status(204).end());
+        const { notes, duration, sleep_type, sleep_category } = req.body;
+
+        const editedSleep = {
+            notes,
+            duration,
+            sleep_type,
+            sleep_category
+        };
+
+        const values = Object.values(editedSleep).filter(Boolean).length;
+        if (values === 0) {
+            return res.status(400).json({
+                error: { message: `Request body must contain value to update` }
+            });
+        }
+
+        SleepingService.updateSleep(db, id, editedSleep).then(
+            res.status(201).end()
+        );
     });
 
 module.exports = sleepingRouter;
