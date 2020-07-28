@@ -8,15 +8,15 @@
 
 required:
 
-- first_name (string)
-- last_name (string)
-- username (string)
-  - must be unique
-- password (string)
-  - must include:
-    - at least 8 and less than 72 characters
-    - can't start with or end with spaces
-    - at least 1 uppercase, 1 lowercase, and 1 number
+-   first_name (string)
+-   last_name (string)
+-   username (string)
+    -   must be unique
+-   password (string)
+    -   must include:
+        -   at least 8 and less than 72 characters
+        -   can't start with or end with spaces
+        -   at least 1 uppercase, 1 lowercase, and 1 number
 
 returns 201 adding user to the database
 
@@ -26,8 +26,8 @@ returns 201 adding user to the database
 
 required:
 
-- username (string)
-- password (string)
+-   username (string)
+-   password (string)
 
 returns JWT
 
@@ -41,8 +41,8 @@ returns all children for a specific user
 
 required:
 
-- first_name (string)
-- age (integer)
+-   first_name (string)
+-   age (integer)
 
 returns 201 adding child to the database
 
@@ -58,8 +58,8 @@ removes specific child from database
 
 required:
 
-- change at least 1 value for name and age
-  returns the updated child's name and age
+-   change at least 1 value for name and age
+-   returns the updated child's name and age
 
 ## /api/eating endpoints:
 
@@ -75,11 +75,11 @@ returns meal data for a specific child
 
 required:
 
-- duration (time or integer?)
-- food_type (enum)
-- side_fed (string)
-  optional:
-- notes (string)
+-   duration (time or integer?)
+-   food_type (enum)
+-   side_fed (string)
+    optional:
+-   notes (string)
 
 returns meal data
 
@@ -105,11 +105,11 @@ returns sleep data for a specific child
 
 required:
 
-- duration (time or integer?)
-- sleep_type (enum)
-- sleep_category (enum)
-  optional:
-- notes (string)
+-   duration (time or integer?)
+-   sleep_type (enum)
+-   sleep_category (enum)
+    optional:
+-   notes (string)
 
 returns sleep data
 

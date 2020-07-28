@@ -14,10 +14,10 @@ const SleepingServcie = {
   getById(db, id) {
     return db.select("*").from("sleeping").where({ id }).first();
   },
-  getByChildId(id, childId) {
+  getByChildId(db, childId) {
     return db.select("*").from("sleeping").where({ childId });
   },
-  deleteSleep(id, id) {
+  deleteSleep(db, id) {
     return db.from("sleeping").where({ id }).delete();
   },
   updateEndSleep(db, id, endSleep) {

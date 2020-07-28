@@ -5,11 +5,12 @@ const helmet = require("helmet");
 const { NODE_ENV } = require("./config");
 const usersRouter = require("./users/users-router");
 const authRouter = require("./auth/auth-router");
-const childrenRouter = require("./child/children-router");
+const childrenRouter = require("./children/children-router");
 const eatingRouter = require("./eating/eating-router");
 const sleepingRouter = require("./sleeping/sleeping-router");
 
 const app = express();
+app.use(express.json());
 
 const morganOptions = NODE_ENV === "production" ? "tiny" : "common";
 
