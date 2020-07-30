@@ -15,7 +15,7 @@ eatingRouter
         const db = req.app.get('db');
 
         EatingService.getByChildId(db, id)
-            .then(childMeals => {
+            .then((childMeals) => {
                 res.json(childMeals.map(EatingService.serializeMeal));
             })
             .catch(next);
@@ -28,7 +28,7 @@ eatingRouter
             notes,
             duration,
             food_type,
-            side_fed,
+            side_fed
         };
 
         const requiredValues = { duration, food_type };
@@ -36,10 +36,10 @@ eatingRouter
         for (const [key, value] of Object.entries(requiredValues))
             if (value == null)
                 return res.status(400).json({
-                    error: { message: `Missing '${key}' in request body` },
+                    error: { message: `Missing '${key}' in request body` }
                 });
 
-        EatingService.insertMeal(db, newMeal).then(meal => {
+        EatingService.insertMeal(db, newMeal).then((meal) => {
             res.status(201)
                 .location(path.posix.join(req.originalUrl, `/${meal.id}`))
                 .json(EatingService.serializeMeal(meal));
@@ -54,10 +54,10 @@ eatingRouter
         const meal_id = req.params.mealId;
 
         EatingService.getById(db, meal_id)
-            .then(meal => {
+            .then((meal) => {
                 if (!meal) {
                     return res.status(404).json({
-                        error: { message: 'Meal does not exist' },
+                        error: { message: 'Meal does not exist' }
                     });
                 }
                 res.meal = meal;
@@ -72,7 +72,9 @@ eatingRouter
         const db = req.app.get('db');
 
         const id = parseInt(req.params.mealId);
-        EatingService.deleteMeal(db, id).then(res.status(204).end()).catch(next);
+        EatingService.deleteMeal(db, id)
+            .then(res.status(204).end())
+            .catch(next);
     })
     .patch((req, res, next) => {
         const db = req.app.get('db');
@@ -84,17 +86,19 @@ eatingRouter
             notes,
             duration,
             food_type,
-            side_fed,
+            side_fed
         };
 
         const values = Object.values(editedMeal).filter(Boolean).length;
         if (values === 0) {
             return res.status(400).json({
-                error: { message: `Request body must contain value to update` },
+                error: { message: `Request body must contain value to update` }
             });
         }
 
-        EatingService.updateMeal(db, id, editedMeal).then(res.status(201).end()).catch(next);
+        EatingService.updateMeal(db, id, editedMeal)
+            .then(res.status(201).end())
+            .catch(next);
     });
 
 module.exports = eatingRouter;

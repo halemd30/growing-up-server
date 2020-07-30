@@ -6,7 +6,7 @@ const SleepingServcie = {
             .insert(newSleep)
             .into('sleeping')
             .returning('*')
-            .then(rows => {
+            .then((rows) => {
                 return rows[0];
             });
     },
@@ -30,9 +30,9 @@ const SleepingServcie = {
             duration: sleep.duration,
             sleep_type: sleep.sleep_type,
             sleep_category: sleep.sleep_category,
-            child_id: sleep.child_id,
+            child_id: sleep.child_id
         };
-    },
+    }
 };
 
 module.exports = SleepingServcie;

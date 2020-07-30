@@ -4,3 +4,5 @@ CREATE TABLE children (
     age int NOT NULL,
     user_id INTEGER REFERENCES users(id)
 );
+
+-- weight?

@@ -15,7 +15,7 @@ childrenRouter
         const user_id = req.user.id;
 
         ChildrenService.getByUserId(db, user_id)
-            .then(children => {
+            .then((children) => {
                 res.json(children.map(ChildrenService.serializeChildren));
             })
             .catch(next);
@@ -27,16 +27,16 @@ childrenRouter
         const newChildren = {
             first_name,
             age,
-            user_id: req.user.id,
+            user_id: req.user.id
         };
         for (const [key, value] of Object.entries(newChildren))
             if (value == null)
                 return res.status(400).json({
-                    error: { message: `Missing '${key}' in request body` },
+                    error: { message: `Missing '${key}' in request body` }
                 });
 
         ChildrenService.insertChildren(db, newChildren)
-            .then(child => {
+            .then((child) => {
                 res.status(201)
                     .location(path.posix.join(req.originalUrl, `/${child.id}`))
                     .json(ChildrenService.serializeChildren(child));
@@ -51,10 +51,10 @@ childrenRouter
         const child_id = req.params.childId;
 
         ChildrenService.getById(db, child_id)
-            .then(child => {
+            .then((child) => {
                 if (!child) {
                     return res.status(404).json({
-                        error: { message: 'Child does not exist' },
+                        error: { message: 'Child does not exist' }
                     });
                 }
                 res.child = child;
@@ -69,7 +69,9 @@ childrenRouter
         const db = req.app.get('db');
 
         const id = req.params.childId;
-        ChildrenService.deleteChildren(db, id).then(res.status(204).end()).catch(next);
+        ChildrenService.deleteChildren(db, id)
+            .then(res.status(204).end())
+            .catch(next);
     })
     .patch((req, res, next) => {
         const db = req.app.get('db');
@@ -78,18 +80,18 @@ childrenRouter
 
         const updatedChildren = {
             first_name,
-            age,
+            age
         };
 
         const values = Object.values(updatedChildren).filter(Boolean).length;
         if (values === 0) {
             return res.status(400).json({
-                error: { message: `Request body must contain value to update` },
+                error: { message: `Request body must contain value to update` }
             });
         }
 
         ChildrenService.updateChildren(db, child_id, updatedChildren)
-            .then(child => {
+            .then((child) => {
                 res.status(201).json(ChildrenService.serializeChildren(child));
             })
             .catch(next);

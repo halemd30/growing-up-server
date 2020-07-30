@@ -10,6 +10,7 @@ const eatingRouter = require('./eating/eating-router');
 const sleepingRouter = require('./sleeping/sleeping-router');
 
 const app = express();
+app.use(express.json());
 
 const morganOptions = NODE_ENV === 'production' ? 'tiny' : 'common';
 
