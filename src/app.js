@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const helmet = require("helmet");
-const { NODE_ENV } = require("./config");
-const usersRouter = require("./users/users-router");
-const authRouter = require("./auth/auth-router");
-const childrenRouter = require("./children/children-router");
-const eatingRouter = require("./eating/eating-router");
-const sleepingRouter = require("./sleeping/sleeping-router");
-=======
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -20,7 +8,6 @@ const authRouter = require('./auth/auth-router');
 const childrenRouter = require('./children/children-router');
 const eatingRouter = require('./eating/eating-router');
 const sleepingRouter = require('./sleeping/sleeping-router');
->>>>>>> master
 
 const app = express();
 app.use(express.json());
