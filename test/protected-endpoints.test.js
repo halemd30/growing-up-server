@@ -24,6 +24,10 @@ describe('Protected endpoints', () => {
 
     const protectedGetEndpoints = [
         {
+            name: 'GET /api/users',
+            path: '/api/users',
+        },
+        {
             name: 'GET /api/children',
             path: '/api/children',
         },
