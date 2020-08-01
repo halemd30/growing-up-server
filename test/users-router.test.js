@@ -21,6 +21,13 @@ describe('users-router endpoints', () => {
         return helpers.cleanAllTables(db);
     });
 
+    it(`Given no users in the database, GET /api/users/ responds with 401 unauthorized`, () => {
+        return supertest(app)
+            .get(`/api/users/`)
+            .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+            .expect(401);
+    });
+
     it('POST /api/users responds with 201 and creates the new user', () => {
         const newUser = {
             first_name: 'new',
@@ -151,8 +158,35 @@ describe('users-router endpoints', () => {
             });
         });
 
+        it(`GET /api/users/ responds with 200 and the data for that user`, () => {
+            const expectedUser = testUsers.filter(user => user.id == testUsers[0].id);
+            return supertest(app)
+                .get(`/api/users/`)
+                .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                .expect(200)
+                .expect(res => {
+                    expect(res.body).to.have.property('id');
+                    expect(res.body.first_name).to.eql(expectedUser[0].first_name);
+                    expect(res.body.last_name).to.eql(expectedUser[0].last_name);
+                    expect(res.body.username).to.eql(expectedUser[0].username);
+                });
+        });
+    
         context('Given an xss attack', () => {
             const { maliciousUser, expectedUser } = helpers.makeMaliciousUser();
+            
+            it(`GET /api/users/ removes xss content`, () => {
+                const expectedUser = testUsers.filter(user => user.id == testUsers[0].id);
+                return supertest(app)
+                    .get(`/api/users/`)
+                    .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+                    .expect(200)
+                    .expect(res => {
+                        expect(res.body.first_name).to.eql(expectedUser[0].first_name);
+                        expect(res.body.last_name).to.eql(expectedUser[0].last_name);
+                        expect(res.body.username).to.eql(expectedUser[0].username);
+                    });
+            });
 
             it(`POST /api/users removes xss content`, () => {
                 return supertest(app)
