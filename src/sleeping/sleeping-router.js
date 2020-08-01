@@ -10,8 +10,7 @@ const sleepingRouter = express.Router();
 
 sleepingRouter
     .route('/all/:childId')
-    // requireAuth
-    .get((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
         const db = req.app.get('db');
         const id = req.params.childId;
 
@@ -21,8 +20,8 @@ sleepingRouter
             })
             .catch(next);
     })
-    // requireAuth
-    .post(jsonParser, (req, res) => {
+
+    .post(requireAuth, jsonParser, (req, res) => {
         const db = req.app.get('db');
 
         const { notes, duration, sleep_type, sleep_category } = req.body;
