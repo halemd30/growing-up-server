@@ -9,8 +9,8 @@ TRUNCATE
 
 INSERT INTO users (first_name, last_name, username, password)
     VALUES
-        ('test', 'user', 'test_w', 'cool_password'),
-        ('other', 'person', 'other_test', 'other_password');
+        ('test', 'user', 'test_w', '$2a$08$LS8WQoWCBZ6EroHTaugApu0bonkqYS5eUIE2MRNfEwxs155RCV.EW'),
+        ('other', 'person', 'other_test', '$2a$08$/Um1un/BUFR6pAvBbeMToekN1WOWBfMtUzvRn3WGiKf/MdM/qPIpW');
 
 INSERT INTO children (first_name, age, user_id)
     VALUES
