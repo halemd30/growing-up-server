@@ -5,6 +5,9 @@ This is the api for our capstone project, called Growing Up.
 ## Live App
 
 Deployed App: https://growing-up.vercel.app/
+Please feel free to check out our app! We have set up a test user account and password.
+    - username: test_user
+    - password: Pass5555
 
 ## Summary
 
