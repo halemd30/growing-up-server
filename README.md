@@ -4,9 +4,11 @@ This is the api for our capstone project, called Growing Up.
 
 ## Live App
 
-Deployed App:
+Deployed App: https://growing-up.vercel.app/
 
 ## Summary
+
+Growing up is the app that grows with your family. It allows parents to easily track and monitor their child's eating and sleeping habits. Parents can start new feeding and sleeping sessions, add details about how well they slept or what they at, and see a list of last sessions and their details. 
 
 ## Technology Used
 
@@ -21,8 +23,6 @@ Back End: Node, Express, PostresSQL
 GrowingUp uses JWT tokens, required on the children, eating, and sleeping endpoint requests. The tokens are created upon a users login and sent in the response body. All protected endpoints pull user_id from the JWT token give at login, and only return data specific to that user.
 
 # API Endpoints:
-
-<!-- contract - whats required from the frontend -->
 
 ## '/'
 
