@@ -38,10 +38,14 @@ describe('children-router endpoints', () => {
                     expect(res.body[0]).to.have.property('id');
                     expect(res.body[0].first_name).to.eql(expectedChildren[0].first_name);
                     expect(res.body[0].age).to.eql(expectedChildren[0].age);
+                    expect(res.body[0].image).to.eql(expectedChildren[0].image);
+                    expect(res.body[0].weight).to.eql(expectedChildren[0].weight);
                     expect(res.body[0].user_id).to.eql(expectedChildren[0].user_id);
                     expect(res.body[1]).to.have.property('id');
                     expect(res.body[1].first_name).to.eql(expectedChildren[1].first_name);
                     expect(res.body[1].age).to.eql(expectedChildren[1].age);
+                    expect(res.body[1].image).to.eql(expectedChildren[1].image);
+                    expect(res.body[1].weight).to.eql(expectedChildren[1].weight);
                     expect(res.body[1].user_id).to.eql(expectedChildren[1].user_id);
                 });
         });
@@ -56,6 +60,8 @@ describe('children-router endpoints', () => {
                     expect(res.body).to.have.property('id');
                     expect(res.body.first_name).to.eql(expectedChild.first_name);
                     expect(res.body.age).to.eql(expectedChild.age);
+                    expect(res.body.image).to.eql(expectedChild.image);
+                    expect(res.body.weight).to.eql(expectedChild.weight);
                     expect(res.body.user_id).to.eql(expectedChild.user_id);
                 });
         });
@@ -66,6 +72,8 @@ describe('children-router endpoints', () => {
                 age: 5,
                 user_id: testUsers[0].id,
                 id: child_id,
+                image: 'https://images.unsplash.com/photo-1557939574-a2cb399f443f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+                weight: '12.23'
             };
             const expectedChild = {
                 ...testChildren[child_id - 1],
@@ -73,6 +81,8 @@ describe('children-router endpoints', () => {
                 first_name: 'newchild',
                 age: 5,
                 user_id: testUsers[0].id,
+                image: 'https://images.unsplash.com/photo-1557939574-a2cb399f443f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+                weight: '12.23'
             };
             return supertest(app)
                 .patch(`/api/children/${child_id}`)
@@ -171,6 +181,8 @@ describe('children-router endpoints', () => {
                 first_name: 'newchild',
                 age: 5,
                 user_id: testUsers[0].id,
+                image: 'https://images.unsplash.com/photo-1557939574-a2cb399f443f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+                weight: '12.23'
             };
             return supertest(app)
                 .post('/api/children')
@@ -181,6 +193,8 @@ describe('children-router endpoints', () => {
                     expect(res.body).to.have.property('id');
                     expect(res.body.first_name).to.eql(newChild.first_name);
                     expect(res.body.age).to.eql(newChild.age);
+                    expect(res.body.image).to.eql(newChild.image);
+                    expect(res.body.weight).to.eql(newChild.weight);
                     expect(res.body.user_id).to.eql(newChild.user_id);
                     expect(res.headers.location).to.eql(`/api/children/${res.body.id}`);
                 })
@@ -227,6 +241,7 @@ describe('children-router endpoints', () => {
                 .expect(res => {
                     expect(res.body[0].first_name).to.eql(expectedChild.first_name);
                     expect(res.body[0].age).to.eql(expectedChild.age);
+                    expect(res.body[0].image).to.eql(expectedChild.image);
                 });
         });
         it(`GET /api/children/:childrenId removes xss content`, () => {
@@ -238,6 +253,7 @@ describe('children-router endpoints', () => {
                 .expect(res => {
                     expect(res.body.first_name).to.eql(expectedChild.first_name);
                     expect(res.body.age).to.eql(expectedChild.age);
+                    expect(res.body.image).to.eql(expectedChild.image);
                 });
         });
         it(`POST /api/children removes xss content`, () => {
@@ -249,6 +265,7 @@ describe('children-router endpoints', () => {
                 .expect(res => {
                     expect(res.body.first_name).to.eql(expectedChild.first_name);
                     expect(res.body.age).to.eql(expectedChild.age);
+                    expect(res.body.image).to.eql(expectedChild.image);
                 });
         });
     });
