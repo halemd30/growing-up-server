@@ -23,11 +23,13 @@ childrenRouter
     .post(jsonParser, (req, res, next) => {
         const db = req.app.get('db');
 
-        const { first_name, age } = req.body;
+        const { first_name, age, weight, image } = req.body;
         const newChildren = {
             first_name,
             age,
-            user_id: req.user.id
+            user_id: req.user.id,
+            weight, 
+            image
         };
         for (const [key, value] of Object.entries(newChildren))
             if (value == null)
@@ -75,12 +77,14 @@ childrenRouter
     })
     .patch((req, res, next) => {
         const db = req.app.get('db');
-        const { first_name, age } = req.body;
+        const { first_name, age, weight, image } = req.body;
         const child_id = req.params.childId;
 
         const updatedChildren = {
             first_name,
-            age
+            age,
+            weight,
+            image
         };
 
         const values = Object.values(updatedChildren).filter(Boolean).length;
