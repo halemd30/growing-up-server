@@ -196,14 +196,12 @@ function makeMaliciousChild() {
         first_name: `image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         age: 3,
         user_id: 1,
-        image: `image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         weight: '22.20'
     };
     const expectedChild = {
         first_name: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
         age: 3,
         user_id: 1,
-        image: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
         weight: '22.20'
     };
     return {

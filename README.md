@@ -73,7 +73,6 @@ required:
 -   first_name (string)
 -   age (integer)
 optional:
--   image (string)
 -   weight (string - decimal type: max three place before decimal, must go to two places after decimal)
 
 returns 201 adding child to the database
