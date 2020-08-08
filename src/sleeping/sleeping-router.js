@@ -13,7 +13,7 @@ sleepingRouter
     .all(requireAuth)
     .get((req, res, next) => {
         const db = req.app.get('db');
-        const id = req.params.childId;
+        const id = parseInt(req.params.childId);
 
         SleepingService.getByChildId(db, id)
             .then((childSleep) => {
