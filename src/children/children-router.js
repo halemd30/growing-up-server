@@ -28,7 +28,7 @@ childrenRouter
             first_name,
             age,
             user_id: req.user.id,
-            weight, 
+            weight,
             image
         };
         for (const [key, value] of Object.entries(newChildren))
@@ -47,7 +47,7 @@ childrenRouter
     });
 
 childrenRouter
-    .route('/:childId')
+    .route('/all/:childId')
     .all(requireAuth, jsonParser, (req, res, next) => {
         const db = req.app.get('db');
         const child_id = req.params.childId;
