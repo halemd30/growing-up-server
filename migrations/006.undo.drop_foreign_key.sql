@@ -1,11 +1,11 @@
 BEGIN;
 
 ALTER TABLE eating 
-DROP CONSTRAINT child_id,
-ADD CONSTRAINT child_id REFERENCES children(id);
+DROP CONSTRAINT eating_child_id_fkey,
+ADD CONSTRAINT child_id FOREIGN KEY (child_id) REFERENCES children(id);
 
 ALTER TABLE sleeping 
-DROP CONSTRAINT child_id,
-ADD CONSTRAINT child_id REFERENCES children(id);
+DROP CONSTRAINT sleeping_child_id_fkey,
+ADD CONSTRAINT child_id FOREIGN KEY (child_id) REFERENCES children(id);
 
 COMMIT;
