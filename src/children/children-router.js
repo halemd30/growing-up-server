@@ -25,14 +25,14 @@ childrenRouter
     .post(jsonParser, (req, res, next) => {
         const db = req.app.get('db');
 
-        const { first_name, age, weight, image } = req.body;
+        const { first_name, age, weight } = req.body;
         const newChildren = {
             first_name,
             age,
             user_id: req.user.id,
-            weight,
-            image
+            weight
         };
+        
         for (const [key, value] of Object.entries(newChildren))
             if (value == null)
                 return res.status(400).json({
