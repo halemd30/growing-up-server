@@ -8,13 +8,16 @@ const authRouter = require('./auth/auth-router');
 const childrenRouter = require('./children/children-router');
 const eatingRouter = require('./eating/eating-router');
 const sleepingRouter = require('./sleeping/sleeping-router');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 app.use(express.json());
+app.use(fileUpload());
 
 const morganOptions = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 app.use(morgan(morganOptions));
+app.use('/uploads', express.static('uploads'));
 app.use(cors());
 app.use(helmet());
 
