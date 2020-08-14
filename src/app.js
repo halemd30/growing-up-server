@@ -11,7 +11,7 @@ const sleepingRouter = require('./sleeping/sleeping-router');
 const fileUpload = require('express-fileupload');
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '50mb', extended: true }));
 app.use(fileUpload());
 
 const morganOptions = NODE_ENV === 'production' ? 'tiny' : 'common';
