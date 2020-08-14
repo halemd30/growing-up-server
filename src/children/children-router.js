@@ -49,7 +49,7 @@ childrenRouter
     });
 
 childrenRouter
-    .route('/all/:childId')
+    .route('/:childId')
     .all(requireAuth, jsonParser, (req, res, next) => {
         const db = req.app.get('db');
         const child_id = req.params.childId;

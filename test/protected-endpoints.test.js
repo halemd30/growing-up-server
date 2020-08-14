@@ -36,6 +36,10 @@ describe('Protected endpoints', () => {
             path: '/api/children/1',
         },
         {
+            name: 'GET /api/children/:childrenId/image',
+            path: '/api/children/1/image',
+        },
+        {
             name: 'GET /api/eating/:mealId',
             path: '/api/eating/1',
         },
@@ -168,6 +172,10 @@ describe('Protected endpoints', () => {
         {
             name: 'PATCH /api/children/:childrenId',
             path: '/api/children/1',
+        },
+        {
+            name: 'PATCH /api/children/:childrenId/image',
+            path: '/api/children/1/image',
         },
         {
             name: 'PATCH /api/eating/:mealId',
