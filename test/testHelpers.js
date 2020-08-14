@@ -26,16 +26,22 @@ function makeTestChildren() {
             first_name: 'ryan',
             age: 5,
             user_id: 1,
+            image: 'https://images.unsplash.com/photo-1557939574-a2cb399f443f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+            weight: '12.20'
         },
         {
             first_name: 'cece',
             age: 12,
             user_id: 2,
+            image: 'https://images.unsplash.com/photo-1562137542-b4cca3fe3e1c?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80',
+            weight: '15.78',
         },
         {
             first_name: 'philip',
             age: 3,
             user_id: 1,
+            image: 'https://images.unsplash.com/photo-1534806391029-791d2695c38b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+            weight: '22.00'
         },
     ];
 }
@@ -190,11 +196,13 @@ function makeMaliciousChild() {
         first_name: `image <img src="https://url.to.file.which/does-not.exist" onerror="alert(document.cookie);">. But not <strong>all</strong> bad.`,
         age: 3,
         user_id: 1,
+        weight: '22.20'
     };
     const expectedChild = {
         first_name: `image <img src="https://url.to.file.which/does-not.exist">. But not <strong>all</strong> bad.`,
         age: 3,
         user_id: 1,
+        weight: '22.20'
     };
     return {
         maliciousChild,

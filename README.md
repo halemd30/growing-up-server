@@ -72,6 +72,8 @@ required:
 
 -   first_name (string)
 -   age (integer)
+optional:
+-   weight (string - decimal type: max three place before decimal, must go to two places after decimal)
 
 returns 201 adding child to the database
 
@@ -97,8 +99,11 @@ required:
 
 -   childId, passed as a string parameter
 -   change at least 1 value for first_name and age
+optional:
+-   image (string)
+-   weight (string - decimal type: max three place before decimal, must go to two places after decimal)
 
-returns the updated child's first_name and age
+returns the updated child
 
 ## /api/eating endpoints:
 
