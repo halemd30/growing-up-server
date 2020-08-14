@@ -21,7 +21,6 @@ const ChildrenService = {
         return db.from('children').where({ id }).update(children);
     },
     serializeChildren(children) {
-        console.log(children);
         return {
             id: children.id,
             first_name: xss(children.first_name),
