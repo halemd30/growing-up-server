@@ -21,16 +21,17 @@ eatingRouter
             .catch(next);
     })
     .post(requireAuth, jsonParser, (req, res) => {
-        const { notes, duration, food_type, side_fed } = req.body;
+        const { notes, duration, food_type, side_fed, date } = req.body;
         const db = req.app.get('db');
         const newMeal = {
             child_id: req.params.childId,
             notes,
+            date,
             duration,
             food_type,
             side_fed
         };
-
+        
         const requiredValues = { duration, food_type };
 
         for (const [key, value] of Object.entries(requiredValues))

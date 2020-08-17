@@ -25,10 +25,11 @@ sleepingRouter
     .post(requireAuth, jsonParser, (req, res) => {
         const db = req.app.get('db');
 
-        const { notes, duration, sleep_type, sleep_category } = req.body;
+        const { notes, duration, sleep_type, sleep_category, date } = req.body;
         const newSleep = {
             child_id: req.params.childId,
             notes,
+            date,
             duration,
             sleep_type,
             sleep_category
