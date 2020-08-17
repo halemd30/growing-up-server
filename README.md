@@ -98,10 +98,8 @@ removes specific child from database
 required:
 
 -   childId, passed as a string parameter
--   change at least 1 value for first_name and age
-optional:
--   image (string)
--   weight (string - decimal type: max three place before decimal, must go to two places after decimal)
+-   change at least 1 value for first_name, weight, image, or age
+    -   weight (string - decimal type: max three place before decimal, must go to two places after decimal)
 
 returns the updated child
 
