@@ -88,7 +88,7 @@ describe('children-router endpoints', () => {
                 .patch(`/api/children/${child_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .send(editedChild)
-                .expect(201)
+                .expect(200)
                 .then(res =>
                     supertest(app)
                         .get(`/api/children/${child_id}`)
@@ -110,7 +110,7 @@ describe('children-router endpoints', () => {
                 .patch(`/api/children/${child_id}`)
                 .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
                 .send(editedChild)
-                .expect(201)
+                .expect(200)
                 .then(res =>
                     supertest(app)
                         .get(`/api/children/${child_id}`)
