@@ -6,6 +6,7 @@ const jsonParser = express.json();
 const { requireAuth } = require('../middleware/jwt-auth');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const cloudinary = require('cloudinary').v2;
 
 const childrenRouter = express.Router();
 
@@ -81,15 +82,25 @@ childrenRouter
         const db = req.app.get('db');
         const { first_name, age, weight, image } = req.body;
         const child_id = req.params.childId;
+        const updatedChildren = {};
 
-        const updatedChildren = {
-            first_name,
-            age,
-            weight,
-            image
-        };
+        if (first_name) {
+            updatedChildren.first_name = first_name;
+        }
 
-        const values = Object.values(updatedChildren).filter(Boolean).length;
+        if (age) {
+            updatedChildren.age = age;
+        }
+
+        if (weight) {
+            updatedChildren.weight = weight;
+        }
+
+        if (image) {
+            updatedChildren.image = image;
+        }
+
+        const values = Object.values(updatedChildren).length;
         if (values === 0) {
             return res.status(400).json({
                 error: { message: `Request body must contain value to update` }
@@ -98,53 +109,9 @@ childrenRouter
 
         ChildrenService.updateChildren(db, child_id, updatedChildren)
             .then((child) => {
-                res.status(201).json(ChildrenService.serializeChildren(child));
+                res.status(200).json(ChildrenService.serializeChildren(child));
             })
             .catch(next);
-    });
-
-childrenRouter
-    .route('/:childId/image')
-    .all(requireAuth, jsonParser, (req, res, next) => {
-        const db = req.app.get('db');
-        const child_id = req.params.childId;
-
-        ChildrenService.getById(db, child_id)
-            .then((child) => {
-                if (!child) {
-                    return res.status(404).json({
-                        error: { message: 'Child does not exist' }
-                    });
-                }
-                res.child = child;
-                next();
-            })
-            .catch(next);
-    })
-    .get((req, res, next) => {
-        const db = req.app.get('db');
-        const id = req.params.childId;
-
-        ChildrenService.getById(db, id).then((child) => {
-            res.contentType('image/jpeg').send(child.image);
-        });
-    })
-    .patch(upload.single('image'), (req, res, next) => {
-        const db = req.app.get('db');
-        const id = req.params.childId;
-        const newImage = req.files.img;
-
-        console.log('FORMDATA', newImage);
-
-        if (newImage === null) {
-            return res.status(400).json({
-                error: { message: `Request body must contain image to update` }
-            });
-        }
-
-        ChildrenService.updateChildren(db, id, { image: newImage.name }).then(
-            res.status(201).end()
-        );
     });
 
 module.exports = childrenRouter;

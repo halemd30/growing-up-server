@@ -26,10 +26,10 @@ const ChildrenService = {
             first_name: xss(children.first_name),
             age: children.age,
             user_id: children.user_id,
-            image: xss(children.image),
+            image: children.image,
             weight: children.weight
         };
-    },
+    }
 };
 
 module.exports = ChildrenService;
